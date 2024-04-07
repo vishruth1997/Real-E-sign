@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'SignDoc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -76,6 +77,12 @@ class _HomePageState extends State<HomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            ElevatedButton(
+              onPressed: () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DocumentSigner()));
+              }, child: 
+              Text('Sign'))
           ],
         ),
       ),
