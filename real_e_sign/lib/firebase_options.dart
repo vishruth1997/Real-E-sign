@@ -85,5 +85,8 @@ class DefaultFirebaseOptions {
     storageBucket: 'real-esi.appspot.com',
     measurementId: 'G-XE7HLRQV34',
   );
+<<<<<<< HEAD
 
+=======
+>>>>>>> aa12c39 (firebase initial login)
 }
