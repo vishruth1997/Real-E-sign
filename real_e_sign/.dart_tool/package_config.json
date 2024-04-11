@@ -140,6 +140,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "firebase_ui_oauth_google",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/firebase_ui_oauth_google-1.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "firebase_ui_shared",
       "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/firebase_ui_shared-1.4.1",
       "packageUri": "lib/",
@@ -180,6 +186,42 @@
       "rootUri": "file:///home/aroda/development/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
+    },
+    {
+      "name": "google_identity_services_web",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/google_identity_services_web-0.3.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "google_sign_in",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/google_sign_in-6.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "google_sign_in_android",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/google_sign_in_android-6.1.22",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "google_sign_in_ios",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/google_sign_in_ios-5.7.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "google_sign_in_platform_interface",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/google_sign_in_platform_interface-2.4.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "google_sign_in_web",
+      "rootUri": "file:///home/aroda/.pub-cache/hosted/pub.dev/google_sign_in_web-0.12.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "http",
@@ -362,7 +404,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-04-11T22:45:08.085297Z",
+  "generated": "2024-04-11T23:22:50.102046Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }
