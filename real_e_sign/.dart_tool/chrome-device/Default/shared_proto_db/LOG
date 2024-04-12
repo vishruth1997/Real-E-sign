@@ -1,6 +1,9 @@
-2024/04/10-17:14:32.970 6484 Reusing MANIFEST C:\Users\VBYARA~1\AppData\Local\Temp\flutter_tools.ddb0fcea\flutter_tools_chrome_device.a6920dc7\Default\shared_proto_db/MANIFEST-000001
-2024/04/10-17:14:32.971 6484 Recovering log #3
-2024/04/10-17:14:32.973 6484 Reusing old log C:\Users\VBYARA~1\AppData\Local\Temp\flutter_tools.ddb0fcea\flutter_tools_chrome_device.a6920dc7\Default\shared_proto_db/000003.log 
-2024/04/10-17:14:47.140 6484 Level-0 table #5: started
-2024/04/10-17:14:47.147 6484 Level-0 table #5: 135807 bytes OK
-2024/04/10-17:14:47.150 6484 Delete type=0 #3
+2024/04/11-20:46:58.903 5ee8 Creating DB C:\Users\windo\AppData\Local\Temp\flutter_tools.2ecba020\flutter_tools_chrome_device.fe587377\Default\shared_proto_db since it was missing.
+2024/04/11-20:46:58.923 5ee8 Reusing MANIFEST C:\Users\windo\AppData\Local\Temp\flutter_tools.2ecba020\flutter_tools_chrome_device.fe587377\Default\shared_proto_db/MANIFEST-000001
+2024/04/11-20:46:58.923 5ee8 Recovering log #3
+2024/04/11-20:46:58.924 5ee8 Level-0 table #3: started
+2024/04/11-20:46:58.937 5ee8 Level-0 table #3: 125575 bytes OK
+2024/04/11-20:46:58.938 5ee8 Recovering log #4
+2024/04/11-20:46:58.938 5ee8 Reusing old log C:\Users\windo\AppData\Local\Temp\flutter_tools.2ecba020\flutter_tools_chrome_device.fe587377\Default\shared_proto_db/000004.log 
+2024/04/11-20:46:58.945 5ee8 Delete type=0 #3
+2024/04/11-20:46:58.946 5ee8 Delete type=2 #5
