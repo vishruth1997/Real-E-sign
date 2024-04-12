@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:file_picker/file_picker.dart';
 
 class DocumentSigner extends StatefulWidget {
   const DocumentSigner({super.key});
@@ -10,6 +10,7 @@ class DocumentSigner extends StatefulWidget {
 class _DocumentSignerState extends State<DocumentSigner> {
   TextEditingController _nameController = TextEditingController();
   DateTime? _selectedDate;
+  String? _filePath;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -24,7 +25,15 @@ class _DocumentSignerState extends State<DocumentSigner> {
       });
     }
   }
+  Future<void> _selectDocument() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
+    if (result != null) {
+      setState(() {
+        _filePath = result.files.single.path;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,9 +78,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                // Add functionality for selecting a document to sign
-              },
+              onPressed: _selectDocument,
               child: Text('Select a Document to Sign'),
             ),
           ],
