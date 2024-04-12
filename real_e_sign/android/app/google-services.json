@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "420403623070",
+    "project_id": "real-esi",
+    "storage_bucket": "real-esi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420403623070:android:04460cc07f2dce15f9f78f",
+        "android_client_info": {
+          "package_name": "com.example.real_e_sign"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2wNpL57crYQWvSw0eVemY22M0Y6SySDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
