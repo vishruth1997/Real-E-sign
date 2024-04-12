@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-
-# Miscellaneous
-#*.class
-#*.log
-#*.pyc
-=======
 # Miscellaneous
 *.class
 *.log
 *.pyc
->>>>>>> main
 *.swp
 .DS_Store
 .atom/
