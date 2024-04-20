@@ -1,18 +1,37 @@
 import 'package:flutter/material.dart';
-import 'HomePage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:real_e_sign/main.dart';
+import 'package:real_e_sign/widgets/StorageFunctions.dart';
 
-class CloudStorage extends StatefulWidget{  
+class CloudStorage extends StatefulWidget {
   @override
   State<CloudStorage> createState() => _CloudStorageState();
 }
 
 class _CloudStorageState extends State<CloudStorage> {
-   @override
+  final storage =
+      FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com");
+  final storageRef =
+      FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com").ref();
+  @override
   Widget build(BuildContext context) {
-    return Text("Lisan Al Gaib");
-    
+    return FutureBuilder<List?>(
+      future: getList(storageRef),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return Container(
+                  height: 50,
+                  child: Center(
+                      child: Text("${snapshot.data?[index]}" ?? "null")));
+            },
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 }
