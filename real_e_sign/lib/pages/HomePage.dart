@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SignDoc.dart';
-
+import './cloud_storage_tab.dart'; 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -42,11 +42,9 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.music_note)),
-                Tab(icon: Icon(Icons.music_video)),
-                Tab(icon: Icon(Icons.camera_alt)),
-                Tab(icon: Icon(Icons.grade)),
-                Tab(icon: Icon(Icons.email)),
+                Tab(text: "sign button"),
+                Tab(text: "list"),
+
               ],
             ), // TabBar
             title: const Text('GeeksForGeeks'),
@@ -54,6 +52,7 @@ class _HomePageState extends State<HomePage> {
           ), // AppBar
           body: TabBarView(
             children: [
+              Center(child:
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -61,11 +60,9 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                             builder: (context) => DocumentSigner()));
                   },
-                  child: Text('Sign')),
-              Icon(Icons.music_video),
-              Icon(Icons.camera_alt),
-              Icon(Icons.grade),
-              Icon(Icons.email),
+                  child: Text('Sign'))
+                ),
+              CloudStorage(),
             ],
           ), // TabBarView
         ), // Scaffold
