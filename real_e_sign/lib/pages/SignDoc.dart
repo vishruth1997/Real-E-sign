@@ -7,7 +7,7 @@ import 'dart:typed_data'; //for uint8list
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DocumentSigner extends StatefulWidget {
-  const DocumentSigner({super.key});
+  const DocumentSigner({Key? key});
   @override
   _DocumentSignerState createState() => _DocumentSignerState();
 }
@@ -16,7 +16,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
   TextEditingController _nameController = TextEditingController();
   DateTime? _selectedDate;
   String? _filePath;
-  PlatformFile? document; //stores result.files.single to get various attriubtes
+  PlatformFile? document; //stores result.files.single to get various attributes
 
   final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com"); //our project bucket
   final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com").ref(); //reference to storage path
@@ -33,41 +33,42 @@ class _DocumentSignerState extends State<DocumentSigner> {
       });
     }
   }
+
   Future<void> _selectDocument() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       setState(() {
         if (!kIsWeb) //path doesn't work on web, throws exception
         {
-          _filePath = result.files.single.path; 
+          _filePath = result.files.single.path;
         }
-        document = result.files.single; //get the document single.  
+        document = result.files.single; //get the document single.
       });
     }
   }
-  //basic upload function. can later be replaced with maybe a popup window showing status like success/inprogress/failed/etc. 
-  Future<void> _uploadDocument() async{ 
-    if(document == null){ //return if document not selected.  
-      return; 
+
+  //basic upload function. can later be replaced with maybe a popup window showing status like success/inprogress/failed/etc.
+  Future<void> _uploadDocument() async {
+    if (document == null) { //return if document not selected.
+      return;
     }
-    if(document!.name == null){ //return if file has no name for w/e reason
-      return; 
+    if (document!.name == null) { //return if file has no name for w/e reason
+      return;
     }
-    String doc_name = document!.name;
+    String doc_name = document!.name!;
     User? user = FirebaseAuth.instance.currentUser;
     String user_id = user!.uid;
     final fileRef = storageRef.child("$user_id/$doc_name"); //create a reference to the uploaded file on firebase
 
-    if(kIsWeb){
+    if (kIsWeb) {
       Uint8List fileBytes = document!.bytes!; //get the bytes of the document
-      await fileRef.putData(fileBytes);  //upload using bytes
-    }
-    else{
-    File file = File(_filePath!);  //create a "File" from the Filepath
-    await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload. 
+      await fileRef.putData(fileBytes); //upload using bytes
+    } else {
+      File file = File(_filePath!); //create a "File" from the Filepath
+      await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,13 +97,13 @@ class _DocumentSignerState extends State<DocumentSigner> {
                 SizedBox(width: 10.0),
                 _selectedDate == null
                     ? Text(
-                        'No Date Selected',
-                        style: TextStyle(fontSize: 16.0),
-                      )
+                  'No Date Selected',
+                  style: TextStyle(fontSize: 16.0),
+                )
                     : Text(
-                        '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}',
-                        style: TextStyle(fontSize: 16.0),
-                      ),
+                  '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}',
+                  style: TextStyle(fontSize: 16.0),
+                ),
                 SizedBox(width: 10.0),
                 ElevatedButton(
                   onPressed: () => _selectDate(context),
@@ -116,9 +117,17 @@ class _DocumentSignerState extends State<DocumentSigner> {
               child: Text('Select a Document to Sign'),
             ),
             SizedBox(height: 20.0),
+            // Display selected document name
+            document != null
+                ? Text(
+              'Selected Document: ${document!.name}',
+              style: TextStyle(fontSize: 16.0),
+            )
+                : Container(),
+            SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: _uploadDocument,
-              child: Text('upload selected document'),
+              child: Text('Upload Selected Document'),
             ),
           ],
         ),
