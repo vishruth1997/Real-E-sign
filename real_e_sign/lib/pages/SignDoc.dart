@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb; //filepicker path results not used on web, use bytes
 import 'dart:typed_data'; //for uint8list
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DocumentSigner extends StatefulWidget {
   const DocumentSigner({super.key});
@@ -52,7 +53,11 @@ class _DocumentSignerState extends State<DocumentSigner> {
     if(document!.name == null){ //return if file has no name for w/e reason
       return; 
     }
-    final fileRef = storageRef.child(document!.name); //create a reference to the uploaded file on firebase
+    String doc_name = document!.name;
+    User? user = FirebaseAuth.instance.currentUser;
+    String user_id = user!.uid;
+    final fileRef = storageRef.child("$user_id/$doc_name"); //create a reference to the uploaded file on firebase
+
     if(kIsWeb){
       Uint8List fileBytes = document!.bytes!; //get the bytes of the document
       await fileRef.putData(fileBytes);  //upload using bytes
