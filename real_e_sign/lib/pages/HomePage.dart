@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SignDoc.dart';
+import 'CreateSign.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -82,7 +83,15 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(context,
                     MaterialPageRoute(builder: (context) => DocumentSigner()));
               }, child: 
-              Text('Sign'))
+              Text('Sign')
+            ),
+            ElevatedButton(
+              onPressed: () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignaturePage()));
+              }, child: 
+              Text('Create your Sign')
+            ),
           ],
         ),
       ),
