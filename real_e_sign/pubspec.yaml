@@ -47,6 +47,7 @@ dependencies:
   firebase_storage: ^11.7.2
   cloud_firestore: ^4.17.0
   flutter_document_picker: ^5.2.3
+  signature: ^5.4.1
 
 dev_dependencies:
   flutter_test:
