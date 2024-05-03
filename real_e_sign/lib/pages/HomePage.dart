@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'SignDoc.dart';
 import './cloud_storage_tab.dart'; 
+import 'CreateSign.dart';
+
+c:\Users\windo\OneDrive\Documents\GitHub\Friend-Me\friend_me\lib\pages\settings.dart
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -64,7 +68,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               CloudStorage(),
             ],
-          ), // TabBarView
+          ),
+          drawer: EndDrawerButton(), // TabBarView
         ), // Scaffold
       ), // DefaultTabController
     ); // MaterialApp
