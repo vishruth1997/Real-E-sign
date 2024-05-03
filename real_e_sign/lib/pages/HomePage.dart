@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'SignDoc.dart';
 import 'CreateSign.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +24,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _counter = 0;
+  Position? _currentLocation;
+  late bool service_permission = false;
+  late LocationPermission permission;
+  String _currentAdress = "";
+  Future<Position> _getCurrentLocation() async{
+    service_permission = await Geolocator.isLocationServiceEnabled();
+    if(!service_permission){
+      print("service disabled");
+    }
+    permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied){
+      permission = await Geolocator.requestPermission();
+    }
+    return await Geolocator.getCurrentPosition();
+  }
 
+  _getAddressFromCoordinates() async{
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(_currentLocation!.latitude, _currentLocation!.longitude);
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAdress = "${place.locality},${place.country}";
+      });
+    }catch(e){
+      print(e);
+    }
+  }
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
