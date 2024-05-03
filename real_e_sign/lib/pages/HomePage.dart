@@ -2,8 +2,24 @@ import 'package:flutter/material.dart';
 import 'SignDoc.dart';
 import './cloud_storage_tab.dart'; 
 import 'CreateSign.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../main.dart'; 
 
-c:\Users\windo\OneDrive\Documents\GitHub\Friend-Me\friend_me\lib\pages\settings.dart
+void SignOut(BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    // Pop the current page
+    Navigator.pop(context);
+    // Push the new page (HomeRoute in this case)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const MyApp()),
+    );
+  } catch (e) {
+    debugPrint(e.toString());
+  }
+}
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,54 +40,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 5,
+    return DefaultTabController(
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
-            bottom: const TabBar(
+            bottom: const TabBar( //tab bar to list documents and list shared documents
               tabs: [
-                Tab(text: "sign button"),
-                Tab(text: "list"),
-
+                Tab(text: "My Documents"),
+                Tab(text: "Shared Documents"),
               ],
             ), // TabBar
-            title: const Text('GeeksForGeeks'),
+            title: const Text('Real E-Sign'),
+            actions: <Widget>[ //button to route to the document signer
+              IconButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentSigner())); 
+              }, icon: const Icon(Icons.add))
+            ],
             backgroundColor: Colors.green,
           ), // AppBar
           body: TabBarView(
             children: [
-              Center(child:
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DocumentSigner()));
-                  },
-                  child: Text('Sign'))
-                ),
               CloudStorage(),
+              Center(child:
+                Text('Hello There')
+                ),
             ],
           ),
-          drawer: EndDrawerButton(), // TabBarView
+          drawer: Drawer(
+            //remove/replace soon
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: [
+                const DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Text('Drawer Header'),
+                ),
+                ListTile(
+                  title: const Text('Add Signature'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignaturePage())); 
+                  },
+                ),
+                ListTile(
+                  title: const Text('Sign Out'),
+                  onTap: () {
+                    SignOut(context); 
+                  },
+                ),
+              ],
+            ),
+          ),// TabBarView
         ), // Scaffold
-      ), // DefaultTabController
-    ); // MaterialApp
+      ); // DefaultTabController// MaterialApp
   }
 }

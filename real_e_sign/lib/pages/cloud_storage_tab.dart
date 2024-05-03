@@ -8,24 +8,26 @@ class CloudStorage extends StatefulWidget {
 }
 
 class _CloudStorageState extends State<CloudStorage> {
+  late String UID; 
   final storage =
       FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com");
   final storageRef =
       FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com").ref();
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List?>(
-      future: getList(storageRef),
+    return FutureBuilder<FutureData?>(
+      future: getData(storageRef),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
+          
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: snapshot.data!.list.length,
             itemBuilder: (context, index) {
               return Container(
                   height: 50,
                   child: Center(
-                      child: Text("${snapshot.data?[index]}" ?? "null")));
+                      child: Text("${snapshot.data!.list[index]}" ?? "null")));
             },
           );
         } else {
@@ -34,4 +36,10 @@ class _CloudStorageState extends State<CloudStorage> {
       },
     );
   }
+}
+
+class FutureData{
+  final List<dynamic> list;
+  final String? UID; 
+  FutureData({required this.list, required this.UID});
 }
