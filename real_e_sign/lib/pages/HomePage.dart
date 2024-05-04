@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'SignDoc.dart';
-import './cloud_storage_tab.dart'; 
+import './document_list.dart'; 
 import 'CreateSign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart'; 
@@ -59,11 +59,11 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentSigner())); 
               }, icon: const Icon(Icons.add))
             ],
-            backgroundColor: Colors.green,
+            backgroundColor: Color.fromARGB(255, 71, 167, 75),
           ), // AppBar
           body: TabBarView(
             children: [
-              CloudStorage(),
+              ListDocuments(),
               Center(child:
                 Text('Hello There')
                 ),

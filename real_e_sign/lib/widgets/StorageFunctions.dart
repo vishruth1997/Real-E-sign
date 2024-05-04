@@ -1,6 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../pages/cloud_storage_tab.dart';
+import '../pages/document_list.dart';
 
 Future<FutureData> getData(Reference storageRef) async{
   final user_id = await FirebaseAuth.instance.currentUser?.uid; 
@@ -10,5 +10,5 @@ Future<FutureData> getData(Reference storageRef) async{
   for (var item in listResult.items) {
     storageList.add(item.name); 
   }
-  return FutureData(list: storageList, UID: user_id); 
+  return FutureData(DocList: storageList, UID: user_id); 
 }
