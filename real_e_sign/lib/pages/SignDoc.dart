@@ -5,7 +5,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb; //filepicker path results not used on web, use bytes
 import 'dart:typed_data'; //for uint8list
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter/services.dart' show rootBundle;
 class DocumentSigner extends StatefulWidget {
   const DocumentSigner({Key? key});
   @override
@@ -18,6 +19,38 @@ class _DocumentSignerState extends State<DocumentSigner> {
   String? _filePath;
   PlatformFile? document; //stores result.files.single to get various attributes
 
+ // Initialization for opening the pdf and signing the pdf
+  pw.Document? pdf;
+  File? imageFile;
+  double imageX = 0;
+  double imageY = 0;
+  @override
+  void initState() {
+    super.initState();
+    pdf = pw.Document();
+  }
+
+  Future<void> _openPdfAndPasteImage() async {
+    final pdfData = await rootBundle.load(_filePath.toString()); // Replace with your PDF file path
+    final pdfImage = pw.MemoryImage(pdfData.buffer.asUint8List());
+
+    final image = pw.MemoryImage(await imageFile!.readAsBytes());
+
+    final page = pw.Page(
+      build: (pw.Context context) {
+        return pw.Stack(
+          children: [
+            pw.Image(pdfImage),
+            pw.Positioned(
+              left: imageX,
+              top: imageY,
+              child: pw.Image(image),
+            ),
+          ],
+        );
+      },
+    );
+  }
   final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com"); //our project bucket
   final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com").ref(); //reference to storage path
   Future<void> _selectDate(BuildContext context) async {
