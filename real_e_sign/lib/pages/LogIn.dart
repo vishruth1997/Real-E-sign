@@ -2,8 +2,6 @@ import 'HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-import '../main.dart'; //for clientid 
 class LogIn extends StatelessWidget {
   const LogIn({super.key});
 
@@ -16,7 +14,6 @@ class LogIn extends StatelessWidget {
           return SignInScreen(
             providers: [
               EmailAuthProvider(),
-              GoogleProvider(clientId: clientId),
             ],
             headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(
@@ -32,7 +29,7 @@ class LogIn extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: action == AuthAction.signIn
                     ? const Text('Welcome to Real E-sign, please sign in!')
-                    : const Text('Welcome to Real E-sign, please sign up!'),
+                    : const Text('Welcome to Real E-sign, enter your credentials to register!'),
               );
             },
             footerBuilder: (context, action) {
@@ -46,7 +43,6 @@ class LogIn extends StatelessWidget {
             },
           );
         }
-
         return const HomePage();
       },
     );

@@ -4,9 +4,6 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
-//To Do: for potential api stuff pls no touch
-const clientId = 'YOUR_CLIENT_ID';
-
 void main() async {
  WidgetsFlutterBinding.ensureInitialized();
  await Firebase.initializeApp(
