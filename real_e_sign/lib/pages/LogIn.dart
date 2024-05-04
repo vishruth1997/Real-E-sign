@@ -2,8 +2,6 @@ import 'HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-import '../main.dart'; //for clientid 
 class LogIn extends StatelessWidget {
   const LogIn({super.key});
 
@@ -16,7 +14,6 @@ class LogIn extends StatelessWidget {
           return SignInScreen(
             providers: [
               EmailAuthProvider(),
-              GoogleProvider(clientId: clientId),
             ],
             headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(

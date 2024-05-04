@@ -8,7 +8,7 @@ Future<FutureData> getData(Reference storageRef) async{
   final listResult = await fileRef.listAll();
   var storageList = []; 
   for (var item in listResult.items) {
-    storageList.add(item); 
+    storageList.add(item.name); 
   }
   return FutureData(list: storageList, UID: user_id); 
 }
