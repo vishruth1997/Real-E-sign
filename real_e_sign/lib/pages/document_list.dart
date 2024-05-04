@@ -78,7 +78,7 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           )
                                         ],
                                       )))),
-                          icon: const Icon(Icons.add))
+                          icon: const Icon(Icons.details))
                     ]),
               );
             },
