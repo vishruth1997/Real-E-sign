@@ -8,12 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
 class DocumentSigner extends StatefulWidget {
-  DocumentSigner({Key? key}); 
+  final ValueChanged<int> update;
+  DocumentSigner({Key? key, required this.update}); 
   @override
   _DocumentSignerState createState() => _DocumentSignerState();
 }
 
 class _DocumentSignerState extends State<DocumentSigner> {
+  
   TextEditingController _nameController = TextEditingController();
   DateTime? _selectedDate;
   String? _filePath;
@@ -83,7 +85,9 @@ class _DocumentSignerState extends State<DocumentSigner> {
 
   //basic upload function. can later be replaced with maybe a popup window showing status like success/inprogress/failed/etc.
   Future<void> _uploadDocument() async {
+    print("uploading"); 
     if (document == null) { //return if document not selected.
+      print("no doc"); 
       return;
     }
     if (document!.name == null) { //return if file has no name for w/e reason
@@ -162,9 +166,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
                 : Container(),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: (){_uploadDocument; 
-
-              }, 
+              onPressed: _uploadDocument, 
               child: Text('Upload Selected Document'),
             ),
           ],
