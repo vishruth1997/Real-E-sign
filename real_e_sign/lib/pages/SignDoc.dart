@@ -51,8 +51,8 @@ class _DocumentSignerState extends State<DocumentSigner> {
       },
     );
   }
-  final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com"); //our project bucket
-  final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com").ref(); //reference to storage path
+  final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com"); //our project bucket
+  final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com").ref(); //reference to storage path
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
