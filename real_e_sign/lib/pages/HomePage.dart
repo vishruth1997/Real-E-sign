@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'SignDoc.dart';
-import './document_list.dart'; 
+import './document_list.dart';
 import 'CreateSign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../main.dart'; 
+import '../main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void SignOut(BuildContext context) async {
   try {
@@ -19,7 +20,6 @@ void SignOut(BuildContext context) async {
     debugPrint(e.toString());
   }
 }
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,63 +40,87 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: const TabBar( //tab bar to list documents and list shared documents
-              tabs: [
-                Tab(text: "My Documents"),
-                Tab(text: "Shared Documents"),
-              ],
-            ), // TabBar
-            title: const Text('Real E-Sign'),
-            actions: <Widget>[ //button to route to the document signer
-              IconButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentSigner())); 
-              }, icon: const Icon(Icons.add))
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: const TabBar(
+            //tab bar to list documents and list shared documents
+            tabs: [
+              Tab(text: "My Documents"),
+              Tab(text: "Shared Documents"),
             ],
-            backgroundColor: Color.fromARGB(255, 71, 167, 75),
-          ), // AppBar
-          body: TabBarView(
-            children: [
-              ListDocuments(),
-              Center(child:
-                Text('Hello There')
+          ), // TabBar
+          title: const Text('Real E-Sign'),
+          actions: <Widget>[
+            //button to route to the document signer
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DocumentSigner()));
+                },
+                icon: const Icon(Icons.add))
+          ],
+          backgroundColor: Color.fromARGB(255, 71, 167, 75),
+        ), // AppBar
+        body: TabBarView(
+          children: [
+            ListDocuments(),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  print("button pressed!");
+                  var db = FirebaseFirestore.instance;
+                  print("db is: $db");
+                  final docRef = db.collection("Users").doc("testuser");
+                  docRef.get().then(
+                    (DocumentSnapshot doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      print(doc);  
+                    },
+                    onError: (e) => print("Error getting document: $e"),
+                  );
+                },
+                child: const Text(
+                  'Register',
                 ),
+              ),
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          //remove/replace soon
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Drawer Header'),
+              ),
+              ListTile(
+                title: const Text('Add Signature'),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignaturePage()));
+                },
+              ),
+              ListTile(
+                title: const Text('Sign Out'),
+                onTap: () {
+                  SignOut(context);
+                },
+              ),
             ],
           ),
-          drawer: Drawer(
-            //remove/replace soon
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: [
-                const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: Text('Drawer Header'),
-                ),
-                ListTile(
-                  title: const Text('Add Signature'),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignaturePage())); 
-                  },
-                ),
-                ListTile(
-                  title: const Text('Sign Out'),
-                  onTap: () {
-                    SignOut(context); 
-                  },
-                ),
-              ],
-            ),
-          ),// TabBarView
-        ), // Scaffold
-      ); // DefaultTabController// MaterialApp
+        ), // TabBarView
+      ), // Scaffold
+    ); // DefaultTabController// MaterialApp
   }
 }

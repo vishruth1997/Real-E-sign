@@ -1,27 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:friend_me/pages/profileCreation.dart';
-Future<String?> tryRegister(String mail, String pass) async {
-  print('$mail');
-  try {
-    final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: mail,
-      password: pass,
-    );
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      return 'The password provided is too weak.';
-    } else if (e.code == 'email-already-in-use') {
-      return 'The account already exists for that email.';
-    }
-  } catch (e) {
-    print(e);
-  }
-  print('success');
-  return "success!";
+import 'package:real_e_sign/pages/HomePage.dart'; 
+import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
+import 'dart:convert';
+
+
+
+Future<void> createUser(eUser user) async{
+            final db = FirebaseFirestore.instance;
+            db.collection("Users").doc("testuser123").set(user.toJson()).onError((error, stackTrace){print("error");});
+            return;
 }
+
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -33,32 +24,15 @@ class Register extends StatefulWidget {
 class RegisterState extends State<Register> {
   RegisterState();
   String? uc = "";
-  final TextEditingController _publicName = TextEditingController();
-  final TextEditingController _privateName = TextEditingController();
+  final TextEditingController FirstName = TextEditingController();
+  final TextEditingController LastName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _email.addListener(() {
-      final String email = _email.text;
-      _email.value = _email.value.copyWith(
-        text: email,
-        selection:
-            TextSelection(baseOffset: email.length, extentOffset: email.length),
-        composing: TextRange.empty,
-      );
-    });
-    _password.addListener(() {
-      final String pass = _password.text;
-      _password.value = _password.value.copyWith(
-        text: pass,
-        selection:
-            TextSelection(baseOffset: pass.length, extentOffset: pass.length),
-        composing: TextRange.empty,
-      );
-    });
+
   }
 
   @override
@@ -67,8 +41,11 @@ class RegisterState extends State<Register> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ProfileCreationRoute(); 
-            print("success");
+            String? uid = FirebaseAuth.instance.currentUser?.uid; 
+            print(uid); 
+            final user = eUser(email: _email.text, first_name: FirstName.text, last_name: LastName.text, uid: null);
+            createUser(user);
+            return HomePage(); 
           }
           return Center(
               child: Column(
@@ -83,7 +60,7 @@ class RegisterState extends State<Register> {
                 ),
               ),
               Container(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                     minHeight: 200,
                     minWidth: 400,
                     maxHeight: 600,
@@ -96,42 +73,42 @@ class RegisterState extends State<Register> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         TextField(
-                          controller: _publicName,
-                          decoration: InputDecoration(labelText: 'Public Name'),
+                          controller: FirstName,
+                          decoration: const InputDecoration(labelText: 'First Name'),
                         ),
                         SizedBox(height: 10),
                         TextField(
-                          controller: _privateName,
+                          controller: LastName,
                           decoration:
-                              InputDecoration(labelText: 'Private Name'),
+                              const InputDecoration(labelText: 'Last Name'),
                         ),
                         SizedBox(height: 10),
                         TextField(
                           controller: _email,
-                          decoration: InputDecoration(labelText: 'Email'),
+                          decoration: const InputDecoration(labelText: 'Email'),
                         ),
                         SizedBox(height: 10),
                         TextField(
                           controller: _password,
-                          decoration: InputDecoration(labelText: 'Password'),
+                          decoration: const InputDecoration(labelText: 'Password'),
                           obscureText: true,
                         ),
                         SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () async {
-                            if (_publicName.text.length == 0) {
+                            if (FirstName.text.isEmpty) {
                               setState(() {
                                 uc = "Please enter a public_name!";
                               });
-                            } else if (_privateName.text.length == 0) {
+                            } else if (LastName.text.isEmpty) {
                               setState(() {
                                 uc = "Please enter a private name";
                               });
-                            }else if (_email.text.length == 0) {
+                            }else if (_email.text.isEmpty) {
                               setState(() {
                                 uc = "Please enter an email!";
                               });
-                            } else if (_password.text.length == 0) {
+                            } else if (_password.text.isEmpty) {
                               setState(() {
                                 uc = "Please enter a password!";
                               });
@@ -161,7 +138,7 @@ class RegisterState extends State<Register> {
                               }
                             }
                           },
-                          child: Text(
+                          child: const Text(
                             'Register',
                           ),
                         ),

@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:real_e_sign/pages/HomePage.dart'; 
+import 'package:real_e_sign/pages/HomePage.dart';
 import 'Register.dart';
+
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -50,9 +51,15 @@ class LoginState extends State<Login> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          TextField(
+                          TextFormField(
                             controller: _email,
                             decoration: InputDecoration(labelText: 'Email'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email address';
+                              }
+                              return null;
+                            },
                           ),
                           SizedBox(height: 10),
                           TextField(
@@ -62,35 +69,41 @@ class LoginState extends State<Login> {
                           ),
                           SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: ()async {
-                              if (_email.text.length == 0) {
-                              setState(() {
-                                error = "Please enter an email!";
-                              });
-                            } else if (_password.text.length == 0) {
-                              setState(() {
-                                error = "Please enter a password!";
-                              });
-                            }
-                              try {
-                                final credential = await FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                  email: _email.text,
-                                  password: _password.text,
-                                );
-                              } on FirebaseAuthException catch (e) {
-                                if (e.code == 'user-not-found') {
-                                  print('wrong password'); 
-                                  setState((){error = 'No user found for that email.';});
-                                } else if (e.code == 'wrong-password') {
-                                  print('wrong password'); 
-                                  setState((){error =  'Wrong password provided for that user.';});
+                              onPressed: () async {
+                                if (_email.text.length == 0) {
+                                  setState(() {
+                                    error = "Please enter an email!";
+                                  });
+                                } else if (_password.text.length == 0) {
+                                  setState(() {
+                                    error = "Please enter a password!";
+                                  });
                                 }
-                              }
-                            },
-                            child: Text('Login')                            
+                                try {
+                                  final credential = await FirebaseAuth.instance
+                                      .signInWithEmailAndPassword(
+                                    email: _email.text,
+                                    password: _password.text,
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  String ex = ''; 
+                                  if (e.code == 'user-not-found') {
+                                    print('wrong password');
+                                    ex = 'No user found for that email.';
+                                    setState((){error = ex;});
+                                  } else if (e.code == 'wrong-password') {
+                                    print('wrong password');
+                                      ex = 'Incorrect Password';
+                                      setState((){error = ex;}); 
+                                  }
+                                  
+                                }
+                              },
+                              child: Text('Login')),
+                          Text(
+                            '$error',
+                            style: TextStyle(color: Colors.red),
                           ),
-                          Text('$error', style: TextStyle(color: Colors.red),),
                         ],
                       ),
                     ),
@@ -117,7 +130,7 @@ class LoginState extends State<Login> {
               ],
             ));
           }
-          return  HomeRoute();
+          return HomePage();
         });
   }
 }
