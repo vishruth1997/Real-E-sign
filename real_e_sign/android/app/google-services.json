@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "420403623070",
-    "project_id": "real-esi",
-    "storage_bucket": "real-esi.appspot.com"
+    "project_number": "495089390185",
+    "project_id": "real-esign-2",
+    "storage_bucket": "real-esign-2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:420403623070:android:04460cc07f2dce15f9f78f",
+        "mobilesdk_app_id": "1:495089390185:android:c904ec4ffb3dc1b75148f8",
         "android_client_info": {
           "package_name": "com.example.real_e_sign"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD2wNpL57crYQWvSw0eVemY22M0Y6SySDM"
+          "current_key": "AIzaSyC4kOj7Itm_rjNBIz4nMDhk99oa8Wsowzo"
         }
       ],
       "services": {
