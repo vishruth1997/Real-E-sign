@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
 class DocumentSigner extends StatefulWidget {
-  const DocumentSigner({Key? key});
+  DocumentSigner({Key? key}); 
   @override
   _DocumentSignerState createState() => _DocumentSignerState();
 }
@@ -18,7 +18,8 @@ class _DocumentSignerState extends State<DocumentSigner> {
   DateTime? _selectedDate;
   String? _filePath;
   PlatformFile? document; //stores result.files.single to get various attributes
-
+  
+  
  // Initialization for opening the pdf and signing the pdf
   pw.Document? pdf;
   File? imageFile;
@@ -100,7 +101,9 @@ class _DocumentSignerState extends State<DocumentSigner> {
       File file = File(_filePath!); //create a "File" from the Filepath
       await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
+    setState((){});
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +162,9 @@ class _DocumentSignerState extends State<DocumentSigner> {
                 : Container(),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _uploadDocument,
+              onPressed: (){_uploadDocument; 
+
+              }, 
               child: Text('Upload Selected Document'),
             ),
           ],

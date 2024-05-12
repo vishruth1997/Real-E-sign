@@ -34,12 +34,14 @@ class HomePage extends StatefulWidget {
   // always marked "final".
 
   final String title = "Real E-Sign";
-
+  
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  update(){setState((){});}
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -61,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DocumentSigner()));
+                          builder: (context) => DocumentSigner(callback: update())));
                 },
                 icon: const Icon(Icons.add))
           ],
