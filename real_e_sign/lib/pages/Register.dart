@@ -43,7 +43,7 @@ class RegisterState extends State<Register> {
           if (snapshot.hasData) {
             String? uid = FirebaseAuth.instance.currentUser?.uid; 
             print(uid); 
-            final user = eUser(email: _email.text, first_name: FirstName.text, last_name: LastName.text, uid: null);
+            final user = eUser(email: _email.text, first_name: FirstName.text, last_name: LastName.text, uid: uid);
             createUser(user);
             return HomePage(); 
           }
