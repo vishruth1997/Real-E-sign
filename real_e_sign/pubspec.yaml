@@ -49,6 +49,8 @@ dependencies:
   flutter_document_picker: ^5.2.3
   signature: ^5.4.1
   pdf: ^3.10.8
+  geolocator: ^11.0.0
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
