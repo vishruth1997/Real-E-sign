@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:real_e_sign/pages/HomePage.dart'; 
 import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
 import 'dart:convert';
-
+import 'package:real_e_sign/pages/LogIn.dart';
 
 
 Future<void> createUser(eUser user) async{
             final db = FirebaseFirestore.instance;
-            db.collection("Users").doc("testuser123").set(user.toJson()).onError((error, stackTrace){print("error");});
+            db.collection("Users").doc('${user.uid}').set(user.toJson()).onError((error, stackTrace){print("error");});
             return;
 }
 
@@ -162,6 +162,9 @@ class RegisterState extends State<Register> {
                           child: Text('Sign in!'),
                           onPressed: () {
                             Navigator.pop(context);
+                            Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login()));
                           })
                     ]),
               ),

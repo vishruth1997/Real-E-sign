@@ -31,7 +31,7 @@ class LoginState extends State<Login> {
                 Container(
                   margin: EdgeInsets.all(30),
                   child: Text(
-                    'Welcome to FriendMe!',
+                    'Welcome to Real E-Sign!',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                 ),

@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 void SignOut(BuildContext context) async {
   try {
     await FirebaseAuth.instance.signOut();
@@ -34,12 +35,18 @@ class HomePage extends StatefulWidget {
   // always marked "final".
 
   final String title = "Real E-Sign";
-
+  
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  int _count = 0;
+
+  // Pass this method to the child page.
+  void _update(int count) {
+    setState(() => _count = count);
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -57,11 +64,12 @@ class _HomePageState extends State<HomePage> {
           actions: <Widget>[
             //button to route to the document signer
             IconButton(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async{
+                  await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DocumentSigner()));
+                          builder: (context) => DocumentSigner(update: _update )));
+                          setState((){}); 
                 },
                 icon: const Icon(Icons.add))
           ],
