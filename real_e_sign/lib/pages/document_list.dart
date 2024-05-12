@@ -27,11 +27,13 @@ class _ListDocumentsState extends State<ListDocuments> {
                 height: 100,
                 margin: EdgeInsets.only(
                     left: 8.0, top: 2.0, bottom: 2.0, right: 8.0),
-                width: double.infinity,
+                width: 800,
                 decoration: BoxDecoration(
-                    color: Colors.greenAccent,
+                    color: Color.fromARGB(255, 230, 205, 231),
                     borderRadius: BorderRadius.circular(15.0)),
+                padding: EdgeInsets.all(10),
                 child: Row(
+
                     mainAxisAlignment:
                         MainAxisAlignment.start, //change here don't //worked
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,13 +80,13 @@ class _ListDocumentsState extends State<ListDocuments> {
                                           )
                                         ],
                                       )))),
-                          icon: const Icon(Icons.details))
+                           icon: const Icon(Icons.more_vert))
                     ]),
               );
             },
           );
         } else {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
