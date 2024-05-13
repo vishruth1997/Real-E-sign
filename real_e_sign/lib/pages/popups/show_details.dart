@@ -45,17 +45,19 @@ void showDetails(
                       ),
                       TextButton(
                         onPressed: () async {
+                          String file_id = snapshot.data!.docs[index].reference.documentID;
                           showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(content: StatefulBuilder(
                                   builder: (context, setState) {
+                                    
                                     return shareItem(
                                         null,
                                         signed_file.fromDocSnapshot(
                                             snapshot.data!.docs[index].data()
                                                 as Map<String, dynamic>),
-                                        uid,snapshot.data!.docs[index].ID);
+                                        uid,file_id);
                                   },
                                 ));
                               });
