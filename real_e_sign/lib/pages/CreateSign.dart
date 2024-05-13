@@ -13,8 +13,8 @@ class SignaturePage extends StatefulWidget {
 }
 
 class _SignaturePageState extends State<SignaturePage>{
-    final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com"); //our project bucket
-    final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esi.appspot.com").ref(); //reference to storage path
+    final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com"); //our project bucket
+    final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com").ref(); //reference to storage path
 
 
   // Create a SignatureController to control the signature pad
