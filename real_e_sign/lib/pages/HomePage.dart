@@ -41,12 +41,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _count = 0;
 
-  // Pass this method to the child page.
-  void _update(int count) {
-    setState(() => _count = count);
-  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -68,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DocumentSigner(update: _update )));
+                          builder: (context) => DocumentSigner()));
                           setState((){}); 
                 },
                 icon: const Icon(Icons.add))

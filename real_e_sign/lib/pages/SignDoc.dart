@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb; //filepicker path results not used on web, use bytes
+import 'package:flutter/foundation.dart'
+    show kIsWeb; //filepicker path results not used on web, use bytes
 import 'dart:typed_data'; //for uint8list
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
+
 class DocumentSigner extends StatefulWidget {
-  final ValueChanged<int> update;
-  DocumentSigner({Key? key, required this.update}); 
+  DocumentSigner({Key? key});
   @override
   _DocumentSignerState createState() => _DocumentSignerState();
 }
@@ -17,12 +19,13 @@ class DocumentSigner extends StatefulWidget {
 class _DocumentSignerState extends State<DocumentSigner> {
   
   TextEditingController _nameController = TextEditingController();
+  String? errorstatus = ''; 
+  String? successStatus = '';
   DateTime? _selectedDate;
   String? _filePath;
   PlatformFile? document; //stores result.files.single to get various attributes
-  
-  
- // Initialization for opening the pdf and signing the pdf
+
+  // Initialization for opening the pdf and signing the pdf
   pw.Document? pdf;
   File? imageFile;
   double imageX = 0;
@@ -34,7 +37,8 @@ class _DocumentSignerState extends State<DocumentSigner> {
   }
 
   Future<void> _openPdfAndPasteImage() async {
-    final pdfData = await rootBundle.load(_filePath.toString()); // Replace with your PDF file path
+    final pdfData = await rootBundle
+        .load(_filePath.toString()); // Replace with your PDF file path
     final pdfImage = pw.MemoryImage(pdfData.buffer.asUint8List());
 
     final image = pw.MemoryImage(await imageFile!.readAsBytes());
@@ -54,8 +58,12 @@ class _DocumentSignerState extends State<DocumentSigner> {
       },
     );
   }
-  final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com"); //our project bucket
-  final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com").ref(); //reference to storage path
+
+  final storage = FirebaseStorage.instanceFor(
+      bucket: "gs://real-esign-2.appspot.com"); //our project bucket
+  final storageRef =
+      FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com")
+          .ref(); //reference to storage path
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -85,27 +93,35 @@ class _DocumentSignerState extends State<DocumentSigner> {
 
   //basic upload function. can later be replaced with maybe a popup window showing status like success/inprogress/failed/etc.
   Future<void> _uploadDocument() async {
-    print("uploading"); 
-    if (document == null) { //return if document not selected.
-      print("no doc"); 
+    print("uploading");
+    if (document == null) {
+      //return if document not selected.
+      print("no doc");
       return;
     }
-    if (document!.name == null) { //return if file has no name for w/e reason
+    if (document!.name == null) {
+      //return if file has no name for w/e reason
       return;
     }
     String doc_name = document!.name!;
+    print(doc_name);
     User? user = FirebaseAuth.instance.currentUser;
     String user_id = user!.uid;
-    final fileRef = storageRef.child("$user_id/$doc_name"); //create a reference to the uploaded file on firebase
+    final fileRef = storageRef.child(
+        "$user_id/$doc_name"); //create a reference to the uploaded file on firebase
 
     if (kIsWeb) {
       Uint8List fileBytes = document!.bytes!; //get the bytes of the document
       await fileRef.putData(fileBytes); //upload using bytes
     } else {
       File file = File(_filePath!); //create a "File" from the Filepath
-      await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload.
+      await fileRef.putFile(
+          file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
-    setState((){});
+    String? uid = await FirebaseAuth.instance.currentUser?.uid; 
+    var sfile = signed_file(creator_uid: uid, file_name: doc_name, storage_path: fileRef.fullPath, uploaded_at: DateTime.now()); 
+    createFile(sfile);
+    setState((){errorstatus = ''; successStatus = 'uploaded!';});
   }
   
 
@@ -137,13 +153,13 @@ class _DocumentSignerState extends State<DocumentSigner> {
                 SizedBox(width: 10.0),
                 _selectedDate == null
                     ? Text(
-                  'No Date Selected',
-                  style: TextStyle(fontSize: 16.0),
-                )
+                        'No Date Selected',
+                        style: TextStyle(fontSize: 16.0),
+                      )
                     : Text(
-                  '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}',
-                  style: TextStyle(fontSize: 16.0),
-                ),
+                        '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
                 SizedBox(width: 10.0),
                 ElevatedButton(
                   onPressed: () => _selectDate(context),
@@ -160,14 +176,22 @@ class _DocumentSignerState extends State<DocumentSigner> {
             // Display selected document name
             document != null
                 ? Text(
-              'Selected Document: ${document!.name}',
-              style: TextStyle(fontSize: 16.0),
-            )
+                    'Selected Document: ${document!.name}',
+                    style: TextStyle(fontSize: 16.0),
+                  )
                 : Container(),
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: _uploadDocument, 
               child: Text('Upload Selected Document'),
+            ),
+            Text(
+              '$errorstatus',
+              style: TextStyle(color: Colors.red),
+            ),
+            Text(
+              '$successStatus',
+              style: TextStyle(color: Colors.green),
             ),
           ],
         ),
