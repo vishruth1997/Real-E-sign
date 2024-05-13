@@ -2,82 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb; //filepicker path results not used on web, use bytes
+import 'package:flutter/foundation.dart'
+    show kIsWeb; //filepicker path results not used on web, use bytes
 import 'dart:typed_data'; //for uint8list
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
 
 class DocumentSigner extends StatefulWidget {
-  const DocumentSigner({Key? key});
+  DocumentSigner({Key? key});
   @override
   _DocumentSignerState createState() => _DocumentSignerState();
 }
 
 class _DocumentSignerState extends State<DocumentSigner> {
+  
   TextEditingController _nameController = TextEditingController();
-  bool PDF_Upload_success = false;
+  String? errorstatus = ''; 
+  String? successStatus = '';
   DateTime? _selectedDate;
   String? _filePath;
   PlatformFile? document; //stores result.files.single to get various attributes
-  Uint8List? signature_img;
-  //location services
-  Position? _currentLocation;
-  Position? pulledPosition;
-  late bool service_permission = false;
-  late LocationPermission permission;
-  String _currentAddress = "";
 
-  Future<Position> _getCurrentLocation() async{
-    service_permission = await Geolocator.isLocationServiceEnabled();
-    if(!service_permission){
-      print("service disabled");
-    }
-    permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied){
-      permission = await Geolocator.requestPermission();
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-
-  Future<void> _getAddressFromCoordinates() async{
-    try{
-      List<Placemark> placemarks = await placemarkFromCoordinates(_currentLocation!.latitude, _currentLocation!.longitude);
-      Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress = "${place.locality},${place.country}";
-      });
-    }catch(e){
-      print(e);
-    }
-  }
-
-  _getlocationDetails() async{
-    _currentLocation = await _getCurrentLocation();
-    setState(() {
-      _currentLocation;  
-    });
-    while(_currentLocation==null){
-      
-    }
-    await _getAddressFromCoordinates();
-    print("${_currentLocation}");
-  }
-
- // InitSatet to get the location as soon as the page is opened
-
+  // Initialization for opening the pdf and signing the pdf
+  pw.Document? pdf;
+  File? imageFile;
+  double imageX = 0;
+  double imageY = 0;
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _getlocationDetails();
+    pdf = pw.Document();
   }
 
+  Future<void> _openPdfAndPasteImage() async {
+    final pdfData = await rootBundle
+        .load(_filePath.toString()); // Replace with your PDF file path
+    final pdfImage = pw.MemoryImage(pdfData.buffer.asUint8List());
 
+    final image = pw.MemoryImage(await imageFile!.readAsBytes());
 
-  final storage = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com"); //our project bucket
-  final storageRef = FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com").ref(); //reference to storage path
+    final page = pw.Page(
+      build: (pw.Context context) {
+        return pw.Stack(
+          children: [
+            pw.Image(pdfImage),
+            pw.Positioned(
+              left: imageX,
+              top: imageY,
+              child: pw.Image(image),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  final storage = FirebaseStorage.instanceFor(
+      bucket: "gs://real-esign-2.appspot.com"); //our project bucket
+  final storageRef =
+      FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com")
+          .ref(); //reference to storage path
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -107,28 +93,37 @@ class _DocumentSignerState extends State<DocumentSigner> {
 
   //basic upload function. can later be replaced with maybe a popup window showing status like success/inprogress/failed/etc.
   Future<void> _uploadDocument() async {
-    if (document == null) { //return if document not selected.
+    print("uploading");
+    if (document == null) {
+      //return if document not selected.
+      print("no doc");
       return;
     }
-    if (document!.name == null) { //return if file has no name for w/e reason
+    if (document!.name == null) {
+      //return if file has no name for w/e reason
       return;
     }
     String doc_name = document!.name!;
+    print(doc_name);
     User? user = FirebaseAuth.instance.currentUser;
     String user_id = user!.uid;
-    final fileRef = storageRef.child("$user_id/$doc_name"); //create a reference to the uploaded file on firebase
+    final fileRef = storageRef.child(
+        "$user_id/$doc_name"); //create a reference to the uploaded file on firebase
 
     if (kIsWeb) {
       Uint8List fileBytes = document!.bytes!; //get the bytes of the document
       await fileRef.putData(fileBytes); //upload using bytes
     } else {
       File file = File(_filePath!); //create a "File" from the Filepath
-      await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload.
+      await fileRef.putFile(
+          file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
-    setState(() {
-      PDF_Upload_success = true;
-    });
+    String? uid = await FirebaseAuth.instance.currentUser?.uid; 
+    var sfile = signed_file(creator_uid: uid, file_name: doc_name, storage_path: fileRef.fullPath, uploaded_at: DateTime.now()); 
+    createFile(sfile);
+    setState((){errorstatus = ''; successStatus = 'uploaded!';});
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -158,22 +153,20 @@ class _DocumentSignerState extends State<DocumentSigner> {
                 SizedBox(width: 10.0),
                 _selectedDate == null
                     ? Text(
-                  'No Date Selected',
-                  style: TextStyle(fontSize: 16.0),
-                )
+                        'No Date Selected',
+                        style: TextStyle(fontSize: 16.0),
+                      )
                     : Text(
-                  '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}',
-                  style: TextStyle(fontSize: 16.0),
-                ),
+                        '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
                 SizedBox(width: 10.0),
+                ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: Text('Select Date'),
+                ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () => _selectDate(context),
-              child: Text('Select Date'),
-            ),            
-            Text('You will be signing from: ($_currentAddress Longitude:${_currentLocation?.latitude}, Latitude${_currentLocation?.longitude})'),
-            //Text('Location: ${_currentAdress}'),
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: _selectDocument,
@@ -183,23 +176,23 @@ class _DocumentSignerState extends State<DocumentSigner> {
             // Display selected document name
             document != null
                 ? Text(
-              'Selected Document: ${document!.name}',
-              style: TextStyle(fontSize: 16.0),
-            )
+                    'Selected Document: ${document!.name}',
+                    style: TextStyle(fontSize: 16.0),
+                  )
                 : Container(),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _uploadDocument,
+              onPressed: _uploadDocument, 
               child: Text('Upload Selected Document'),
             ),
-                        SizedBox(height: 20.0),
-            // Display selected document name
-            PDF_Upload_success == true
-                ? Text(
-              '${document!.name} uploaded Successfuly',
-              style: TextStyle(fontSize: 16.0),
-            )
-                : Container(),
+            Text(
+              '$errorstatus',
+              style: TextStyle(color: Colors.red),
+            ),
+            Text(
+              '$successStatus',
+              style: TextStyle(color: Colors.green),
+            ),
           ],
         ),
       ),

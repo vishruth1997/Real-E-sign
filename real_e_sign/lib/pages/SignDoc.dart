@@ -9,6 +9,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
 
 class DocumentSigner extends StatefulWidget {
   const DocumentSigner({Key? key});
@@ -17,6 +18,7 @@ class DocumentSigner extends StatefulWidget {
 }
 
 class _DocumentSignerState extends State<DocumentSigner> {
+  String? errorstatus = ''; 
   TextEditingController _nameController = TextEditingController();
   bool PDF_Upload_success = false;
   DateTime? _selectedDate;
@@ -113,7 +115,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
     if (document!.name == null) { //return if file has no name for w/e reason
       return;
     } 
-    String doc_name = document!.name!;
+    String doc_name = document!.name;
     User? user = FirebaseAuth.instance.currentUser;
     String user_id = user!.uid;
     final fileRef = storageRef.child("$user_id/$doc_name"); //create a reference to the uploaded file on firebase
@@ -125,6 +127,9 @@ class _DocumentSignerState extends State<DocumentSigner> {
       File file = File(_filePath!); //create a "File" from the Filepath
       await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
+    String? uid = await FirebaseAuth.instance.currentUser?.uid; 
+    var sfile = signed_file(creator_uid: uid, file_name: doc_name, storage_path: fileRef.fullPath, uploaded_at: DateTime.now()); 
+    createFile(sfile);
     setState(() {
       PDF_Upload_success = true;
     });
@@ -193,6 +198,10 @@ class _DocumentSignerState extends State<DocumentSigner> {
               child: Text('Upload Selected Document'),
             ),
                         SizedBox(height: 20.0),
+                        Text(
+              '$errorstatus',
+              style: TextStyle(color: Colors.red),
+            ),
             // Display selected document name
             PDF_Upload_success == true
                 ? Text(
