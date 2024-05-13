@@ -11,8 +11,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
 
 class DocumentSigner extends StatefulWidget {
-  final ValueChanged<int> update;
-  DocumentSigner({Key? key, required this.update});
+  DocumentSigner({Key? key});
   @override
   _DocumentSignerState createState() => _DocumentSignerState();
 }

@@ -27,6 +27,10 @@ Future<void> createFile(signed_file sFile) async{
             return;
 }
 
+Future<void> shareFile(signed_file sfile, String? send_uid, String? rec_uid) async{
+   final db = FirebaseFirestore.instance;
+}
+
 class eUser {
   final String? first_name;
   final String? last_name;
@@ -67,7 +71,7 @@ class signed_file {
         file_name: doc['file_name'] as String,
         storage_path: doc['storage_path'] as String,
         creator_uid: doc['creator_uid'] as String,
-        uploaded_at: DateTime.parse(doc['uploaded_at']),
+        uploaded_at: DateTime.parse(doc['uploaded_at'].toDate().toString()),
       );
   Map<String, dynamic> toJson() => {
         "file_name": file_name,

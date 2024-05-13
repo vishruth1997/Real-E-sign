@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:real_e_sign/pages/popups/share_doc.dart';
 import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:real_e_sign/pages/popups/show_details.dart'; 
 
 class ListDocuments extends StatefulWidget {
   @override
@@ -11,13 +13,16 @@ class ListDocuments extends StatefulWidget {
 
 class _ListDocumentsState extends State<ListDocuments> {
   final uid = FirebaseAuth.instance.currentUser?.uid;
-  final db = FirebaseFirestore.instance; 
+  final db = FirebaseFirestore.instance;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
-
+  
+  //function for the show details on pressing an item. 
+  
   /* deprecated with firestore managing files
   final storage =
       FirebaseStorage.instanceFor(bucket: "gs://real-esign-2.appspot.com");
@@ -52,47 +57,18 @@ class _ListDocumentsState extends State<ListDocuments> {
                       MainAxisAlignment.start, //change here don't //worked
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("${snapshot.data!.docs[index].get('file_name')}" ?? "null"),
+                    Text("${snapshot.data!.docs[index].get('file_name')}" ??
+                        "null"),
                     Spacer(),
                     IconButton(
-                        onPressed: () => showDialog(
-                            context: context,
-                            builder: (BuildContext context) => Dialog(
-                                child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                            "${snapshot.data!.docs[index].get('file_name')}"),
-                                        const SizedBox(height: 15),
-                                        Text("uploaded on: ${snapshot.data!.docs[index].get('uploaded_at')}"),
-                                        Row(
-                                          children: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('Download'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('Share'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('Close'),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    )))),
+                        onPressed: () async {
+                          var user = await db
+                              .collection('Users')
+                              .doc(
+                                  '${snapshot.data!.docs[index].get('creator_uid')}')
+                              .get();
+                          return showDetails(snapshot, index, user, context, uid);
+                        },
                         icon: const Icon(Icons.more_vert))
                   ]),
             );
