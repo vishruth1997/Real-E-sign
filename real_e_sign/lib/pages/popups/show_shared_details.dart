@@ -8,8 +8,8 @@ import 'dart:html' as html;
 
 
 
-void showDetails(
-    signed_file sfile, DocumentReference fileref, var user, BuildContext context, var uid) {
+void showSharedDetails(
+    signed_file sfile, String? sender_name, BuildContext context) {
   showDialog(
       context: context,
       builder: (context) {
@@ -27,7 +27,7 @@ void showDetails(
                       "signed on: ${sfile.uploaded_at.toString()}"),
                   const SizedBox(height: 10),
                   Text(
-                      "signed by: ${user.get('first_name')} ${user.get('last_name')}"),
+                      "signed by: ${sender_name}"),
                   const SizedBox(height: 10),
                   Text(
                       "signed at: Latitude: ${sfile.latitude}, Longitude: ${sfile.longitude}}"),
@@ -44,28 +44,11 @@ void showDetails(
                               sfile.storage_path!);
                           final fileUrl = await pathRef.getDownloadURL();
                           html.AnchorElement anchorElement =
-                              new html.AnchorElement(href: fileUrl);
+                          new html.AnchorElement(href: fileUrl);
                           anchorElement.download = fileUrl;
                           anchorElement.click();
                         },
                         child: const Text('Download'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
- 
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(content: StatefulBuilder(
-                                  builder: (context, setState) {
-                                    
-                                    return shareItem(
-                                        null, sfile.file_name! ,fileref, uid);
-                                  },
-                                ));
-                              });
-                        },
-                        child: const Text('Share'),
                       ),
                       TextButton(
                         onPressed: () {

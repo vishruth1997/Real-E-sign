@@ -43,7 +43,7 @@ class eUser {
       required this.email,
       required this.uid});
 
-  factory eUser.fromDocSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) => eUser(
+  factory eUser.fromDocSnapshot(Map<String, dynamic> doc) => eUser(
         email: doc['email'] as String,
         first_name: doc['first_name'] as String,
         last_name: doc['last_name'] as String,

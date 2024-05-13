@@ -5,7 +5,7 @@ import 'CreateSign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import './shared_list.dart'; 
 
 void SignOut(BuildContext context) async {
   try {
@@ -73,26 +73,7 @@ class _HomePageState extends State<HomePage> {
         body: TabBarView(
           children: [
             ListDocuments(),
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  print("button pressed!");
-                  var db = FirebaseFirestore.instance;
-                  print("db is: $db");
-                  final docRef = db.collection("Users").doc("testuser");
-                  docRef.get().then(
-                    (DocumentSnapshot doc) {
-                      final data = doc.data() as Map<String, dynamic>;
-                      print(doc);  
-                    },
-                    onError: (e) => print("Error getting document: $e"),
-                  );
-                },
-                child: const Text(
-                  'Register',
-                ),
-              ),
-            ),
+           SharedDocuments(),
           ],
         ),
         drawer: Drawer(

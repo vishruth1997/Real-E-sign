@@ -3,10 +3,10 @@ import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class shareItem extends StatefulWidget {
-  final signed_file sfile;
+  final String fileName;
   final String? uid;
-  final String? fileID; 
-  shareItem(Key? key, this.sfile, this.fileID, this.uid);
+  final DocumentReference fileRef; 
+  shareItem(Key? key, this.fileName, this.fileRef, this.uid);
 
   @override
   State<shareItem> createState() => _shareItemState();
@@ -33,6 +33,7 @@ class _shareItemState extends State<shareItem> {
           ),
           ElevatedButton(
               onPressed: () async {
+                DocumentReference myUser = db.collection('Users').doc('${widget.uid}');  
                 var shareUser = await db
                     .collection('Users')
                     .where("email", isEqualTo: _email.text)
@@ -43,18 +44,19 @@ class _shareItemState extends State<shareItem> {
                     print("error does not exist");
                   });
                 } else {
-                  String? shareuid = shareUser.docs.first.get('uid');
+                  var shareUID = shareUser.docs.first.get('uid'); //firestore document of the user being shared to
                   final SharedFile = {
-                    'file_id': '$widget.fileID',
-                    'sender_id': '${widget.uid}',
+                    'file_ref': widget.fileRef,
+                    'sender_ref': myUser,
                     'shared_on': DateTime.now(),
                   };
-                  db.collection('Users').doc('shareuid').collection('sharedFiles').add(SharedFile);
+                  print('shareUID'); 
+                 db.collection('Users').doc(shareUID).collection('SharedFiles').add(SharedFile);
     
                   setState(() {
-                    successStatus = widget.sfile.file_name;
+                    successStatus = widget.fileName;
                   });
-                  print(widget.sfile.file_name);
+                  print(widget.fileName);
                 }
               },
               child: Text('Share')),

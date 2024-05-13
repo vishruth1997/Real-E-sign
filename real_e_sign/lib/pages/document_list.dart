@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:real_e_sign/pages/popups/show_details.dart'; 
+import 'package:real_e_sign/pages/popups/show_details.dart';
+import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
 
 class ListDocuments extends StatefulWidget {
   @override
@@ -58,12 +59,16 @@ class _ListDocumentsState extends State<ListDocuments> {
                     Spacer(),
                     IconButton(
                         onPressed: () async {
+                          final data = snapshot.data!.docs[index].data() as Map<String, dynamic>; 
+                          signed_file sfile = signed_file.fromDocSnapshot(data);
+                          DocumentReference fileRef = snapshot.data!.docs[index].reference; 
+                          print(sfile.file_name); 
                           var user = await db
                               .collection('Users')
                               .doc(
                                   '${snapshot.data!.docs[index].get('creator_uid')}')
                               .get();
-                          return showDetails(snapshot, index, user, context, uid);
+                          return showDetails(sfile,fileRef, user, context, uid);
                         },
                         icon: const Icon(Icons.more_vert))
                   ]),
