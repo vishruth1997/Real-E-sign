@@ -57,7 +57,7 @@ void showDetails(
                                         signed_file.fromDocSnapshot(
                                             snapshot.data!.docs[index].data()
                                                 as Map<String, dynamic>),
-                                        uid);
+                                        uid,snapshot.data!.docs[index].ID);
                                   },
                                 ));
                               });
