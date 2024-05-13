@@ -20,8 +20,12 @@ Future<FutureData> getData(Reference storageRef) async {
   return FutureData(DocList: storageList, UID: user_id);
 }
 
-eUser eUserFromJson(String str) => eUser.fromJson(json.decode(str));
-String eUserToJson(eUser data) => json.encode(data.toJson());
+Future<void> createFile(signed_file sFile) async{
+            final db = FirebaseFirestore.instance;
+            String? uid = await FirebaseAuth.instance.currentUser?.uid; 
+            db.collection("Users").doc('$uid').collection("UserFiles").add(sFile.toJson());
+            return;
+}
 
 class eUser {
   final String? first_name;
@@ -34,16 +38,41 @@ class eUser {
       required this.email,
       required this.uid});
 
-  factory eUser.fromJson(Map<String, dynamic> json) => eUser(
-        email: json['email'] as String,
-        first_name: json['first_name'] as String,
-        last_name: json['last_name'] as String,
-        uid: json['uid'] as String,
+  factory eUser.fromDocSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) => eUser(
+        email: doc['email'] as String,
+        first_name: doc['first_name'] as String,
+        last_name: doc['last_name'] as String,
+        uid: doc['uid'] as String,
       );
   Map<String, dynamic> toJson() => {
-        "firest_name": first_name,
+        "first_name": first_name,
         "last_name": last_name,
         "email": email,
         "uid": uid,
+      };
+}
+
+class signed_file {
+  final String? file_name;
+  final String? storage_path;
+  final String? creator_uid;
+  final DateTime uploaded_at;
+  signed_file(
+      {this.file_name,
+      this.storage_path,
+      required this.creator_uid,
+      required this.uploaded_at});
+
+  factory signed_file.fromDocSnapshot(Map<String, dynamic> doc) => signed_file(
+        file_name: doc['file_name'] as String,
+        storage_path: doc['storage_path'] as String,
+        creator_uid: doc['creator_uid'] as String,
+        uploaded_at: DateTime.parse(doc['uploaded_at']),
+      );
+  Map<String, dynamic> toJson() => {
+        "file_name": file_name,
+        "storage_path": storage_path,
+        "creator_uid": creator_uid,
+        "uploaded_at": uploaded_at,
       };
 }
