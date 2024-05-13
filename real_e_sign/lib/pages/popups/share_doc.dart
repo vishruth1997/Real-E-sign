@@ -1,13 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class shareItem extends StatefulWidget {
   final signed_file sfile;
   final String? uid;
-  shareItem(Key? key, this.sfile, this.uid);
+  final String? fileID; 
+  shareItem(Key? key, this.sfile, this.fileID, this.uid);
 
   @override
   State<shareItem> createState() => _shareItemState();
@@ -45,6 +44,12 @@ class _shareItemState extends State<shareItem> {
                   });
                 } else {
                   String? shareuid = shareUser.docs.first.get('uid');
+                  final SharedFile = {
+                    'file_id': '$widget.fileID',
+                    'sender_id': '${widget.uid}',
+                    'shared_on': DateTime.now(),
+                  };
+                  db.collection('Users').doc('shareuid').collection('sharedFiles').add(SharedFile);
     
                   setState(() {
                     successStatus = widget.sfile.file_name;
