@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 icon: const Icon(Icons.add))
           ],
-          backgroundColor: Color.fromARGB(255, 71, 167, 75),
+          backgroundColor: Colors.grey
         ), // AppBar
         body: TabBarView(
           children: [

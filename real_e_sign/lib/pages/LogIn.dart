@@ -28,15 +28,13 @@ class LoginState extends State<Login> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Spacer(flex:3), 
                 Container(
                   margin: EdgeInsets.all(30),
                   child: Text(
                     'Welcome to Real E-Sign!',
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
-                ),
-                Spacer(
-                  flex: 3,
                 ),
                 Container(
                   constraints: BoxConstraints(
