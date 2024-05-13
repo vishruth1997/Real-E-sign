@@ -17,6 +17,7 @@ class DocumentSigner extends StatefulWidget {
 }
 
 class _DocumentSignerState extends State<DocumentSigner> {
+  
   TextEditingController _nameController = TextEditingController();
   String? errorstatus = ''; 
   String? successStatus = '';
@@ -122,6 +123,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
     createFile(sfile);
     setState((){errorstatus = ''; successStatus = 'uploaded!';});
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +182,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
                 : Container(),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _uploadDocument,
+              onPressed: _uploadDocument, 
               child: Text('Upload Selected Document'),
             ),
             Text(
