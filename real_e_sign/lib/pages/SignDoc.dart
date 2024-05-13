@@ -112,7 +112,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
     }
     if (document!.name == null) { //return if file has no name for w/e reason
       return;
-    }
+    } 
     String doc_name = document!.name!;
     User? user = FirebaseAuth.instance.currentUser;
     String user_id = user!.uid;
