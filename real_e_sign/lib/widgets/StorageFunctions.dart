@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../pages/document_list.dart';
 import 'dart:convert';
 
+//deprecated, from old version that did not use firestore
 Future<FutureData> getData(Reference storageRef) async {
   print("getting data");
   final user_id = await FirebaseAuth.instance.currentUser?.uid;
@@ -61,22 +62,28 @@ class signed_file {
   final String? storage_path;
   final String? creator_uid;
   final DateTime uploaded_at;
+  final double? latitude; 
+  final double? longitude;
   signed_file(
       {this.file_name,
       this.storage_path,
       required this.creator_uid,
-      required this.uploaded_at});
+      required this.uploaded_at, this.latitude, this.longitude});
 
   factory signed_file.fromDocSnapshot(Map<String, dynamic> doc) => signed_file(
         file_name: doc['file_name'] as String,
         storage_path: doc['storage_path'] as String,
         creator_uid: doc['creator_uid'] as String,
         uploaded_at: DateTime.parse(doc['uploaded_at'].toDate().toString()),
+        latitude: doc['latitude'] as double,
+        longitude: doc['longitude'] as double,
       );
   Map<String, dynamic> toJson() => {
         "file_name": file_name,
         "storage_path": storage_path,
         "creator_uid": creator_uid,
         "uploaded_at": uploaded_at,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }
