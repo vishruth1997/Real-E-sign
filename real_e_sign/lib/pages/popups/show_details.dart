@@ -4,6 +4,9 @@ import 'package:real_e_sign/pages/popups/share_doc.dart';
 import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import 'dart:html' as html;
 
+
+
+
 void showDetails(
     var snapshot, var index, var user, BuildContext context, var uid) {
   showDialog(
@@ -20,10 +23,13 @@ void showDetails(
                   Text("${snapshot.data!.docs[index].get('file_name')}"),
                   const SizedBox(height: 10),
                   Text(
-                      "uploaded on: ${DateTime.parse(snapshot.data!.docs[index].get('uploaded_at').toDate().toString())}"),
+                      "signed on: ${DateTime.parse(snapshot.data!.docs[index].get('uploaded_at').toDate().toString())}"),
                   const SizedBox(height: 10),
                   Text(
                       "signed by: ${user.get('first_name')} ${user.get('last_name')}"),
+                  const SizedBox(height: 10),
+                  Text(
+                      "signed at: Latitude: ${snapshot.data!.docs[index].get('latitude')}, Longitude: ${snapshot.data!.docs[index].get('longitude')}"),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -128,7 +128,7 @@ class _DocumentSignerState extends State<DocumentSigner> {
       await fileRef.putFile(file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
     String? uid = await FirebaseAuth.instance.currentUser?.uid; 
-    var sfile = signed_file(creator_uid: uid, file_name: doc_name, storage_path: fileRef.fullPath, uploaded_at: DateTime.now()); 
+    var sfile = signed_file(creator_uid: uid, file_name: doc_name, storage_path: fileRef.fullPath, uploaded_at: DateTime.now(), latitude:  _currentLocation!.latitude, longitude:  _currentLocation!.longitude); 
     createFile(sfile);
     setState(() {
       PDF_Upload_success = true;
