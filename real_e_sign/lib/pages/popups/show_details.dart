@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:real_e_sign/pages/popups/share_doc.dart';
 import 'package:real_e_sign/widgets/StorageFunctions.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:html' as html;
 
 void showDetails(
@@ -57,7 +55,7 @@ void showDetails(
                                         signed_file.fromDocSnapshot(
                                             snapshot.data!.docs[index].data()
                                                 as Map<String, dynamic>),
-                                        uid);
+                                        uid,snapshot.data!.docs[index].ID);
                                   },
                                 ));
                               });
