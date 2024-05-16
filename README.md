@@ -1,2 +1,2 @@
 # Real-E-sign
-Android application to E-sign the documents
+Web application demonstrating Firebase Auth,Firestore, and Cloud Storage using signed pdfs. 
