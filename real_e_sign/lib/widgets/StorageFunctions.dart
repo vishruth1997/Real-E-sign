@@ -24,7 +24,14 @@ Future<FutureData> getData(Reference storageRef) async {
 Future<void> createFile(signed_file sFile) async{
             final db = FirebaseFirestore.instance;
             String? uid = await FirebaseAuth.instance.currentUser?.uid; 
+            //if the file already exists, update the file instead of creating duplicate entries. 
+            final checkExists = await db.collection("Users").doc('$uid').collection("UserFiles").where('file_name', isEqualTo: sFile.file_name).get(); 
+            if(checkExists.docs.isNotEmpty){
+              db.collection("Users").doc('$uid').collection("UserFiles").doc(checkExists.docs[0].id).set(sFile.toJson()); 
+            }
+            else{
             db.collection("Users").doc('$uid').collection("UserFiles").add(sFile.toJson());
+            }
             return;
 }
 
@@ -74,7 +81,7 @@ class signed_file {
         file_name: doc['file_name'] as String,
         storage_path: doc['storage_path'] as String,
         creator_uid: doc['creator_uid'] as String,
-        uploaded_at: DateTime.parse(doc['uploaded_at'].toDate().toString()),
+        uploaded_at: doc['uploaded_at'].toDate().toLocal(),
         latitude: doc['latitude'] as double,
         longitude: doc['longitude'] as double,
       );

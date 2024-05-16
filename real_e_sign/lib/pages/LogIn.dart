@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:real_e_sign/pages/HomePage.dart';
 import 'Register.dart';
 
-
 class Login extends StatefulWidget {
   const Login({super.key});
   @override
@@ -28,9 +27,9 @@ class LoginState extends State<Login> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Spacer(flex:3), 
+                const Spacer(flex: 3),
                 Container(
-                  margin: EdgeInsets.all(30),
+                  margin: const EdgeInsets.all(30),
                   child: Text(
                     'Welcome to Real E-Sign!',
                     style: Theme.of(context).textTheme.displaySmall,
@@ -43,15 +42,15 @@ class LoginState extends State<Login> {
                       maxHeight: 600,
                       maxWidth: 500),
                   child: Card(
-                    margin: EdgeInsets.all(10.0),
+                    margin:const EdgeInsets.all(10.0),
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           TextFormField(
                             controller: _email,
-                            decoration: InputDecoration(labelText: 'Email'),
+                            decoration: const InputDecoration(labelText: 'Email'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your email address';
@@ -59,20 +58,20 @@ class LoginState extends State<Login> {
                               return null;
                             },
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextField(
                             controller: _password,
-                            decoration: InputDecoration(labelText: 'Password'),
+                            decoration: const InputDecoration(labelText: 'Password'),
                             obscureText: true,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           ElevatedButton(
                               onPressed: () async {
-                                if (_email.text.length == 0) {
+                                if (_email.text.isEmpty) {
                                   setState(() {
                                     error = "Please enter an email!";
                                   });
-                                } else if (_password.text.length == 0) {
+                                } else if (_password.text.isEmpty) {
                                   setState(() {
                                     error = "Please enter a password!";
                                   });
@@ -84,23 +83,26 @@ class LoginState extends State<Login> {
                                     password: _password.text,
                                   );
                                 } on FirebaseAuthException catch (e) {
-                                  String ex = ''; 
+                                  String ex = '';
                                   if (e.code == 'user-not-found') {
                                     print('wrong password');
                                     ex = 'No user found for that email.';
-                                    setState((){error = ex;});
+                                    setState(() {
+                                      error = ex;
+                                    });
                                   } else if (e.code == 'wrong-password') {
                                     print('wrong password');
-                                      ex = 'Incorrect Password';
-                                      setState((){error = ex;}); 
+                                    ex = 'Incorrect Password';
+                                    setState(() {
+                                      error = ex;
+                                    });
                                   }
-                                  
                                 }
                               },
-                              child: Text('Login')),
+                              child: const Text('Login')),
                           Text(
-                            '$error',
-                            style: TextStyle(color: Colors.red),
+                            error,
+                            style: const TextStyle(color: Colors.red),
                           ),
                         ],
                       ),
@@ -108,27 +110,27 @@ class LoginState extends State<Login> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text('Not registered?',
                             style: Theme.of(context).textTheme.bodySmall),
                         TextButton(
-                            child: Text('Sign Up!'),
+                            child: const Text('Sign Up!'),
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Register()));
-                            })
+                                      builder: (context) => const Register()));
+                            }),
                       ]),
                 ),
-                Spacer(flex: 4),
+                const Spacer(flex: 4),
               ],
             ));
           }
-          return HomePage();
+          return const HomePage();
         });
   }
 }

@@ -5,18 +5,21 @@ import 'package:real_e_sign/pages/popups/show_details.dart';
 import 'package:real_e_sign/widgets/StorageFunctions.dart'; 
 
 class ListDocuments extends StatefulWidget {
+  const ListDocuments({super.key});
+
   @override
   State<ListDocuments> createState() => _ListDocumentsState();
 }
 
 class _ListDocumentsState extends State<ListDocuments> {
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  final db = FirebaseFirestore.instance;
+  late String? uid;
+  late FirebaseFirestore db;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    uid = FirebaseAuth.instance.currentUser?.uid;
+    db = FirebaseFirestore.instance;
   }
   
   //function for the show details on pressing an item. 
@@ -35,7 +38,7 @@ class _ListDocumentsState extends State<ListDocuments> {
           return const Text('Something went wrong');
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,
@@ -43,20 +46,19 @@ class _ListDocumentsState extends State<ListDocuments> {
             return Container(
               height: 100,
               margin:
-                  EdgeInsets.only(left: 8.0, top: 2.0, bottom: 2.0, right: 8.0),
+                  const EdgeInsets.only(left: 8.0, top: 2.0, bottom: 2.0, right: 8.0),
               width: 800,
               decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 230, 205, 231),
+                  color: const Color.fromARGB(255, 230, 205, 231),
                   borderRadius: BorderRadius.circular(15.0)),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Row(
                   mainAxisAlignment:
                       MainAxisAlignment.start, //change here don't //worked
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("${snapshot.data!.docs[index].get('file_name')}" ??
-                        "null"),
-                    Spacer(),
+                    Text("${snapshot.data!.docs[index].get('file_name')}"),
+                    const Spacer(),
                     IconButton(
                         onPressed: () async {
                           final data = snapshot.data!.docs[index].data() as Map<String, dynamic>; 

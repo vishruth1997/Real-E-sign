@@ -25,7 +25,7 @@ class _shareItemState extends State<shareItem> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("Enter email of user to share with: "),
+          const Text("Enter email of user to share with: "),
           const SizedBox(height: 10),
           TextField(
             controller: _email,
@@ -48,7 +48,7 @@ class _shareItemState extends State<shareItem> {
                   final SharedFile = {
                     'file_ref': widget.fileRef,
                     'sender_ref': myUser,
-                    'shared_on': DateTime.now(),
+                    'shared_on': DateTime.now().toUtc(),
                   };
                   print('shareUID'); 
                  db.collection('Users').doc(shareUID).collection('SharedFiles').add(SharedFile);
@@ -59,20 +59,20 @@ class _shareItemState extends State<shareItem> {
                   print(widget.fileName);
                 }
               },
-              child: Text('Share')),
+              child: const Text('Share')),
           Text(
             '$errorstatus',
-            style: TextStyle(color: Colors.red),
+            style: const TextStyle(color: Colors.red),
           ),
           Text(
             '$successStatus',
-            style: TextStyle(color: Colors.green),
+            style: const TextStyle(color: Colors.green),
           ),
           TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Close'))
+              child: const Text('Close'))
         ]);
   }
 }
