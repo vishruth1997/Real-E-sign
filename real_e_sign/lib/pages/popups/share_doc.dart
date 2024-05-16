@@ -54,7 +54,7 @@ class _shareItemState extends State<shareItem> {
                  db.collection('Users').doc(shareUID).collection('SharedFiles').add(SharedFile);
     
                   setState(() {
-                    successStatus = widget.fileName;
+                    successStatus = 'File shared!';
                   });
                   print(widget.fileName);
                 }

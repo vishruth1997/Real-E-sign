@@ -41,7 +41,7 @@ class PDFSignerState extends State<PDFSigner> {
     document.form.flattenAllFields();   
     widget.pdf = Uint8List.fromList(await document.save());
     document.dispose();
-    //widget.pdfcb(widget.pdf); //set state in doc
+    widget.pdfcb(widget.pdf); //set state in doc
     setState(() {});
   }
 

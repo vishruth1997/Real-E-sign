@@ -9,6 +9,10 @@ import 'dart:html' as html;
 
 void showSharedDetails(signed_file sfile, String? sender_name,
     DateTime shared_date, BuildContext context) {
+  String isSignOrUpload = 'Uploaded';
+  if (sfile.signStatus) {
+    isSignOrUpload = 'Signed';
+  }
   showDialog(
       context: context,
       builder: (context) {
@@ -23,15 +27,15 @@ void showSharedDetails(signed_file sfile, String? sender_name,
                   Text("${sfile.file_name}"),
                   const SizedBox(height: 10),
                   Text(
-                      "signed on:${DateFormat('MM/dd/yyyy hh:mm:ss').format(sfile.uploaded_at.toLocal())}"),
+                      "$isSignOrUpload on:${DateFormat('MM/dd/yyyy hh:mm:ss').format(sfile.uploaded_at.toLocal())}"),
                   const SizedBox(height: 10),
-                  Text("signed by: $sender_name"),
-                  const SizedBox(height: 10),
-                  Text(
-                      "signed at: Latitude: ${sfile.latitude}, Longitude: ${sfile.longitude}}"),
+                  Text("$isSignOrUpload by: $sender_name"),
                   const SizedBox(height: 10),
                   Text(
-                      "shared with you on:${DateFormat('MM/dd/yyyy hh:mm:ss').format(shared_date)}"),
+                      "$isSignOrUpload at: Latitude: ${sfile.latitude}, Longitude: ${sfile.longitude}}"),
+                  const SizedBox(height: 10),
+                  Text(
+                      "Shared with you on:${DateFormat('MM/dd/yyyy hh:mm:ss').format(shared_date)}"),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

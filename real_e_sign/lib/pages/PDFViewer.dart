@@ -37,10 +37,10 @@ class viewPdfState extends State<viewPdf> {
     return Scaffold(
         appBar: AppBar(),
         body: FutureBuilder(
-            future: getPdfUrl(),
+            future: getPdfBytes(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                SfPdfViewer.network(snapshot.data!);
+                SfPdfViewer.memory(snapshot.data!);
               }
               return Center(child: CircularProgressIndicator());
             }));

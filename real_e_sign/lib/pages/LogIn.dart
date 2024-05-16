@@ -42,7 +42,7 @@ class LoginState extends State<Login> {
                       maxHeight: 600,
                       maxWidth: 500),
                   child: Card(
-                    margin:const EdgeInsets.all(10.0),
+                    margin: const EdgeInsets.all(10.0),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -50,7 +50,8 @@ class LoginState extends State<Login> {
                         children: <Widget>[
                           TextFormField(
                             controller: _email,
-                            decoration: const InputDecoration(labelText: 'Email'),
+                            decoration:
+                                const InputDecoration(labelText: 'Email'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your email address';
@@ -61,7 +62,8 @@ class LoginState extends State<Login> {
                           const SizedBox(height: 10),
                           TextField(
                             controller: _password,
-                            decoration: const InputDecoration(labelText: 'Password'),
+                            decoration:
+                                const InputDecoration(labelText: 'Password'),
                             obscureText: true,
                           ),
                           const SizedBox(height: 20),
@@ -83,25 +85,24 @@ class LoginState extends State<Login> {
                                     password: _password.text,
                                   );
                                 } on FirebaseAuthException catch (e) {
-                                  String ex = '';
                                   if (e.code == 'user-not-found') {
                                     print('wrong password');
-                                    ex = 'No user found for that email.';
+
                                     setState(() {
-                                      error = ex;
+                                      error = 'No user found for that email.';
                                     });
                                   } else if (e.code == 'wrong-password') {
                                     print('wrong password');
-                                    ex = 'Incorrect Password';
                                     setState(() {
-                                      error = ex;
+                                      error = 'Incorrect Password';
                                     });
+                                  } else {
                                   }
                                 }
                               },
                               child: const Text('Login')),
                           Text(
-                            error,
+                            '$error',
                             style: const TextStyle(color: Colors.red),
                           ),
                         ],
