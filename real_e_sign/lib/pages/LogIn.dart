@@ -122,8 +122,7 @@ class LoginState extends State<Login> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const HomePage(),
-                                      settings: const RouteSettings(name: "/home")));
+                                      builder: (context) => const Register()));
                             }),
                       ]),
                 ),

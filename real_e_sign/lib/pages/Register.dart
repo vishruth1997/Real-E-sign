@@ -45,7 +45,7 @@ class RegisterState extends State<Register> {
             print(uid); 
             final user = eUser(email: _email.text, first_name: FirstName.text, last_name: LastName.text, uid: uid);
             createUser(user);
-            return HomePage(); 
+            Navigator.pop(context); 
           }
           return Center(
               child: Column(
