@@ -36,6 +36,7 @@ class DocumentSelectorState extends State<DocumentSelector> {
   late LocationPermission permission;
   String _currentAddress = "";
   bool selected = false;
+  bool signed = false; 
   Future<Position> _getCurrentLocation() async {
     service_permission = await Geolocator.isLocationServiceEnabled();
     if (!service_permission) {
@@ -104,7 +105,9 @@ class DocumentSelectorState extends State<DocumentSelector> {
 
   void pdfCallback(Uint8List pdf) {
     setState(() {
+      print("setState"); 
       documentbytes = pdf;
+      signed = true; //if document is signed set to true
       errorstatus = 'debug: pdf saved';
     });
   }
@@ -143,6 +146,7 @@ class DocumentSelectorState extends State<DocumentSelector> {
       await fileRef.putFile(
           file); //upload file.  returns type UploadTask which tracks status of the upload.
     }
+    print(signed); 
 
     var sfile = signed_file(
         creator_uid: uid,
@@ -150,7 +154,8 @@ class DocumentSelectorState extends State<DocumentSelector> {
         storage_path: fileRef.fullPath,
         uploaded_at: DateTime.now().toUtc(),
         latitude: _currentLocation!.latitude,
-        longitude: _currentLocation!.longitude);
+        longitude: _currentLocation!.longitude,
+        signStatus: signed);
     createFile(sfile);
     setState(() {
       PDF_Upload_success = '${document!.name} uploaded successfuly!';
