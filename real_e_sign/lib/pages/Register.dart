@@ -162,9 +162,6 @@ class RegisterState extends State<Register> {
                           child: Text('Sign in!'),
                           onPressed: () {
                             Navigator.pop(context);
-                            Navigator.push(context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()));
                           })
                     ]),
               ),
