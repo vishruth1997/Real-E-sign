@@ -39,7 +39,7 @@ class _SharedDocumentsState extends State<SharedDocuments> {
           itemBuilder: (context, index) {
             return FutureBuilder(
                 future: getFuture(snapshot.data!.docs[index].get('file_ref'),
-                    snapshot.data!.docs[index].get('sender_ref')),
+                    snapshot.data!.docs[index].get('sender_ref'), snapshot.data!.docs[index].get('shared_on').toDate().toLocal()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -50,6 +50,7 @@ class _SharedDocumentsState extends State<SharedDocuments> {
                   else {
                     signed_file sfile = snapshot.data!.sfile; 
                     String? sender_name = snapshot.data!.sender_name; 
+                    DateTime shared_on = snapshot.data!.shared_on; 
                     return Container(
                       height: 100,
                       margin: EdgeInsets.only(
@@ -71,7 +72,7 @@ class _SharedDocumentsState extends State<SharedDocuments> {
                             IconButton(
                                 onPressed: () async {
                                   showSharedDetails(
-                                      sfile, sender_name, context);
+                                      sfile, sender_name, shared_on, context);
                                 },
                                 icon: const Icon(Icons.more_vert))
                           ]),
@@ -88,11 +89,12 @@ class _SharedDocumentsState extends State<SharedDocuments> {
 class FutureData {
   final signed_file sfile;
   final String? sender_name;
-  FutureData({required this.sfile, required this.sender_name});
+  final DateTime shared_on;
+  FutureData({required this.sfile, required this.sender_name, required this.shared_on});
 }
 
 Future<FutureData> getFuture(
-    DocumentReference file, DocumentReference user) async {
+    DocumentReference file, DocumentReference user, DateTime shared_on) async {
   DocumentSnapshot fileSnap = await file.get();
   final filedata = fileSnap.data() as Map<String, dynamic>;
   signed_file sfile = signed_file.fromDocSnapshot(filedata);
@@ -100,5 +102,6 @@ Future<FutureData> getFuture(
   final userdata = userdoc.data() as Map<String, dynamic>;
   final sender = eUser.fromDocSnapshot(userdata);
   final sender_name = "${sender.first_name} ${sender.last_name}";
-  return FutureData(sfile: sfile, sender_name: sender_name);
+  final sharedtime = shared_on.toLocal(); 
+  return FutureData(sfile: sfile, sender_name: sender_name, shared_on: sharedtime);
 }

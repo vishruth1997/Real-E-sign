@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:real_e_sign/pages/popups/share_doc.dart';
 import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import 'package:real_e_sign/pages/PDFViewer.dart';
+import 'package:intl/intl.dart'; 
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
@@ -22,7 +23,7 @@ void showDetails(signed_file sfile, DocumentReference fileref, var user,
                 children: <Widget>[
                   Text("${sfile.file_name}"),
                   const SizedBox(height: 10),
-                  Text("signed on: ${sfile.uploaded_at.toString()}"),
+                  Text("signed on: ${DateFormat('MM/dd/yyyy hh:mm:ss').format(sfile.uploaded_at.toLocal())}"),
                   const SizedBox(height: 10),
                   Text(
                       "signed by: ${user.get('first_name')} ${user.get('last_name')}"),

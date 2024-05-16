@@ -48,7 +48,7 @@ class _shareItemState extends State<shareItem> {
                   final SharedFile = {
                     'file_ref': widget.fileRef,
                     'sender_ref': myUser,
-                    'shared_on': DateTime.now(),
+                    'shared_on': DateTime.now().toUtc(),
                   };
                   print('shareUID'); 
                  db.collection('Users').doc(shareUID).collection('SharedFiles').add(SharedFile);

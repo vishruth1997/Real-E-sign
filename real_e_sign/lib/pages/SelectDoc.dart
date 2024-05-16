@@ -12,13 +12,16 @@ import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import './PDFsigner.dart';
 import 'package:intl/intl.dart';
 
-class DocumentSigner extends StatefulWidget {
-  const DocumentSigner({Key? key});
+
+typedef documentCallBack = void Function();
+class DocumentSelector extends StatefulWidget {
+  final documentCallBack docCallBack;
+  const DocumentSelector({Key? key, required this.docCallBack});
   @override
-  _DocumentSignerState createState() => _DocumentSignerState();
+  DocumentSelectorState createState() => DocumentSelectorState();
 }
 
-class _DocumentSignerState extends State<DocumentSigner> {
+class DocumentSelectorState extends State<DocumentSelector> {
   String? errorstatus = '';
   String? PDF_Upload_success = '';
   String? _filePath;
@@ -145,13 +148,15 @@ class _DocumentSignerState extends State<DocumentSigner> {
         creator_uid: uid,
         file_name: doc_name,
         storage_path: fileRef.fullPath,
-        uploaded_at: DateTime.now(),
+        uploaded_at: DateTime.now().toUtc(),
         latitude: _currentLocation!.latitude,
         longitude: _currentLocation!.longitude);
     createFile(sfile);
     setState(() {
       PDF_Upload_success = '${document!.name} uploaded successfuly!';
-    });
+    }
+    );
+    widget.docCallBack; 
   }
 
   @override

@@ -49,16 +49,16 @@ class _ListDocumentsState extends State<ListDocuments> {
                   const EdgeInsets.only(left: 8.0, top: 2.0, bottom: 2.0, right: 8.0),
               width: 800,
               decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 230, 205, 231),
+                  color: const Color.fromARGB(255, 230, 205, 231),
                   borderRadius: BorderRadius.circular(15.0)),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Row(
                   mainAxisAlignment:
                       MainAxisAlignment.start, //change here don't //worked
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text("${snapshot.data!.docs[index].get('file_name')}"),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
                         onPressed: () async {
                           final data = snapshot.data!.docs[index].data() as Map<String, dynamic>; 

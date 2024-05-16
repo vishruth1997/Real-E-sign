@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'SignDoc.dart';
+import 'SelectDoc.dart';
 import './document_list.dart';
 import 'CreateSign.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,6 +42,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  void callBack(){setState((){});}
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DocumentSigner()));
+                          builder: (context) => DocumentSelector(docCallBack: callBack)));
                           setState((){}); 
                 },
                 icon: const Icon(Icons.add))
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> {
         ), // AppBar
         body: TabBarView(
           children: [
-            const ListDocuments(),
+           ListDocuments(),
            SharedDocuments(),
           ],
         ),
