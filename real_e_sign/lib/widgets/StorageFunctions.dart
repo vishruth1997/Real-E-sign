@@ -71,11 +71,12 @@ class signed_file {
   final DateTime uploaded_at;
   final double? latitude; 
   final double? longitude;
+  final bool signStatus; 
   signed_file(
       {this.file_name,
       this.storage_path,
       required this.creator_uid,
-      required this.uploaded_at, this.latitude, this.longitude});
+      required this.uploaded_at, this.latitude, this.longitude, required this.signStatus});
 
   factory signed_file.fromDocSnapshot(Map<String, dynamic> doc) => signed_file(
         file_name: doc['file_name'] as String,
@@ -84,6 +85,7 @@ class signed_file {
         uploaded_at: doc['uploaded_at'].toDate().toLocal(),
         latitude: doc['latitude'] as double,
         longitude: doc['longitude'] as double,
+        signStatus: doc['signStatus'] as bool, 
       );
   Map<String, dynamic> toJson() => {
         "file_name": file_name,
@@ -92,5 +94,6 @@ class signed_file {
         "uploaded_at": uploaded_at,
         "latitude": latitude,
         "longitude": longitude,
+        "signStatus": signStatus
       };
 }

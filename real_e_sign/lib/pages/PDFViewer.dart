@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,26 +24,32 @@ class viewPdfState extends State<viewPdf> {
 
   Future<Uint8List?> getPdfBytes() async {
     Uint8List? pdfBytes;
-    pdfBytes =  await widget.pdfUrl!.getData(); 
+    print("getpdfbytes");
+    print(widget.pdfUrl);
+    pdfBytes = await widget.pdfUrl?.getData();
     return pdfBytes;
   }
+
   Future<String?> getPdfUrl() async {
-    String? RealUrl = await widget.pdfUrl?.getDownloadURL(); 
+    String? RealUrl = await widget.pdfUrl?.getDownloadURL();
     return RealUrl;
   }
+
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         appBar: AppBar(),
         body: FutureBuilder(
             future: getPdfUrl(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                SfPdfViewer.network(snapshot.data!);
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
               }
-              return Center(child: CircularProgressIndicator());
+                return Column(children: [
+                  Expanded(
+                    child: SfPdfViewer.network(snapshot.data!),
+                  )
+                ]);
             }));
   }
 }

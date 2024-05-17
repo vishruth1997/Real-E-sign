@@ -10,6 +10,10 @@ import 'dart:html' as html;
 
 void showDetails(signed_file sfile, DocumentReference fileref, var user,
     BuildContext context, var uid) {
+      String isUplOrSig = "Uploaded"; 
+      if(sfile.signStatus == true){
+          isUplOrSig = "Signed";
+      } 
   showDialog(
       context: context,
       builder: (context) {
@@ -23,13 +27,13 @@ void showDetails(signed_file sfile, DocumentReference fileref, var user,
                 children: <Widget>[
                   Text("${sfile.file_name}"),
                   const SizedBox(height: 10),
-                  Text("signed on: ${DateFormat('MM/dd/yyyy hh:mm:ss').format(sfile.uploaded_at.toLocal())}"),
+                  Text("$isUplOrSig on: ${DateFormat('MM/dd/yyyy hh:mm:ss').format(sfile.uploaded_at.toLocal())}"),
                   const SizedBox(height: 10),
                   Text(
-                      "signed by: ${user.get('first_name')} ${user.get('last_name')}"),
+                      "$isUplOrSig  by: ${user.get('first_name')} ${user.get('last_name')}"),
                   const SizedBox(height: 10),
                   Text(
-                      "signed at: Latitude: ${sfile.latitude}, Longitude: ${sfile.longitude}}"),
+                      "$isUplOrSig at: Latitude: ${sfile.latitude}, Longitude: ${sfile.longitude}}"),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
