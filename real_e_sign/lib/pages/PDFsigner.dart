@@ -22,32 +22,50 @@ class PDFSigner extends StatefulWidget {
 }
 
 class PDFSignerState extends State<PDFSigner> {
+  late Uint8List currentPDF; //working file pdf
   final GlobalKey<SfSignaturePadState> _signaturePadGlobalKey = GlobalKey();
-
+  var isSaved = "";
   @override
   void initState() {
     super.initState();
+    currentPDF = widget.pdf;
   }
 
-  void Sign() async {
+  void Sign(int PageNumber, Offset Position) async {
+    print("Signing");
+    print(PageNumber);
+    print(Position.dx);
+    print(Position.dy);
     final data =
         await _signaturePadGlobalKey.currentState!.toImage(pixelRatio: 3.0);
     final sigbytes = await data.toByteData(format: ui.ImageByteFormat.png);
-    PdfDocument document = PdfDocument(inputBytes: widget.pdf);
-    PdfPage page = document.pages[0];
-
+    PdfDocument document = PdfDocument(inputBytes: currentPDF);
+    PdfPage page = document.pages[PageNumber];
+    //center the sig on the click
+    double xPos = Position.dx - 75; 
+    double yPos = Position.dy - 25; 
     page.graphics?.drawImage(PdfBitmap(sigbytes!.buffer.asUint8List()),
-        const Rect.fromLTWH(350, 500, 125, 100));
-    document.form.flattenAllFields();   
-    widget.pdf = Uint8List.fromList(await document.save());
+        Rect.fromLTWH(xPos, yPos, 150, 50));
+    document.form.flattenAllFields();
+    currentPDF = Uint8List.fromList(await document.save());
     document.dispose();
-    //widget.pdfcb(widget.pdf); //set state in doc
+
     setState(() {});
   }
 
-  //Clear the signature in the SfSignaturePad.
+  // save the working pdf to the original pdf bytes (not on disk file) passed from select document
+  void Save() {
+    widget.pdfcb(currentPDF);
+    setState(() {
+      isSaved = "Saved PDF!";
+    });
+  }
+
+  //Clear the signature in the pad and reset the pdf to the widget.pdf
   void ClearSignature() {
     _signaturePadGlobalKey.currentState!.clear();
+    currentPDF = widget.pdf;
+    setState(() {});
   }
 
   @override
@@ -59,12 +77,13 @@ class PDFSignerState extends State<PDFSigner> {
         body: Column(
           children: [
             Expanded(
-              child: SfPdfViewer.memory(
-                widget.pdf,
-              ),
-            ),
+                child: SfPdfViewer.memory(currentPDF,
+                    onTap: (PdfGestureDetails details) {
+              print("tappy");
+              Sign(details.pageNumber - 1, details.pagePosition);
+            })),
             Container(
-              height: 200,
+              height: 220,
               margin: const EdgeInsets.only(
                   left: 8.0, top: 2.0, bottom: 2.0, right: 8.0),
               decoration: BoxDecoration(
@@ -93,8 +112,8 @@ class PDFSignerState extends State<PDFSigner> {
                       Padding(
                         padding: EdgeInsets.all(5),
                         child: ElevatedButton(
-                          child: const Text('Add Signature'),
-                          onPressed: Sign,
+                          child: const Text('Save'),
+                          onPressed: Save,
                         ),
                       ),
                       Padding(
@@ -106,7 +125,8 @@ class PDFSignerState extends State<PDFSigner> {
                       ),
                     ],
                     mainAxisAlignment: MainAxisAlignment.center,
-                  )
+                  ),
+                  Text(isSaved)
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),

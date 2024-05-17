@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:real_e_sign/pages/PDFViewer.dart';
-
 import 'package:real_e_sign/widgets/StorageFunctions.dart';
 import 'package:intl/intl.dart';
 // ignore: avoid_web_libraries_in_flutter
@@ -36,20 +34,6 @@ void showSharedDetails(signed_file sfile, String? sender_name,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      TextButton(
-                        onPressed: () async {
-                          final storageRef = FirebaseStorage.instanceFor(
-                                  bucket: "gs://real-esign-2.appspot.com")
-                              .ref();
-                          final pathRef = storageRef.child(sfile.storage_path!);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      viewPdf(pdfUrl: pathRef)));
-                        },
-                        child: const Text('View'),
-                      ),
                       TextButton(
                         onPressed: () async {
                           final storageRef = FirebaseStorage.instanceFor(

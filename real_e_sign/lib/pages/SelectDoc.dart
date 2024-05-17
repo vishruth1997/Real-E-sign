@@ -189,7 +189,7 @@ class DocumentSelectorState extends State<DocumentSelector> {
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: selected ? null : _selectDocument,
+                onPressed: _selectDocument,
                 child: const Text('Select Document'),
               ),
               // Display selected document name
@@ -205,7 +205,7 @@ class DocumentSelectorState extends State<DocumentSelector> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => PDFSigner(
-                                  pdf: document!.bytes!,
+                                  pdf: documentbytes!,
                                   pdfcb: pdfCallback,
                                 )));
                   }
