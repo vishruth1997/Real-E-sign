@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: production-files
-        path: ./build/web
+        path: ./real-esign/build/web
   
   deploy:
     name: Deploy
@@ -48,7 +48,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: production-files
-        path: ./build
+        path: ./real-esign/build
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
