@@ -1,6 +1,6 @@
 # real_e_sign
 
--[Linak to the real_e_sign website](https://real-esign-hosting-aroda-2a1560b07c765730ff41c4bb146960e016a15d.gitlab.io/)
+-[ Link to the real_e_sign website](https://real-esign-hosting-aroda-2a1560b07c765730ff41c4bb146960e016a15d.gitlab.io/)
 
 ## Getting Started
 
