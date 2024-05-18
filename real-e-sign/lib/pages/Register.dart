@@ -98,11 +98,11 @@ class RegisterState extends State<Register> {
                           onPressed: () async {
                             if (FirstName.text.isEmpty) {
                               setState(() {
-                                uc = "Please enter a public_name!";
+                                uc = "Please enter your first name!";
                               });
                             } else if (LastName.text.isEmpty) {
                               setState(() {
-                                uc = "Please enter a private name";
+                                uc = "Please enter your last name";
                               });
                             }else if (_email.text.isEmpty) {
                               setState(() {
